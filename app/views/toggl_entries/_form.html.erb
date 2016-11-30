@@ -1,0 +1,44 @@
+<%= f.hidden_field :toggl_id %>
+
+<div class="box tabular">
+  <div>
+    <p>
+      <label><%= l('toggl.description') %></label>
+      <%= f.text_field :description, :size => 80 %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.start') %></label>
+      <% Time.use_zone(User.current.time_zone || 'UTC') do %>
+        <%= f.datetime_select :start %>
+      <% end %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.stop') %></label>
+      <% Time.use_zone(User.current.time_zone || 'UTC') do %>
+        <%= f.datetime_select :stop %>
+      <% end %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.toggl_workspace') %></label>
+      <%= f.collection_select :toggl_workspace_id, TogglWorkspace.order(:name), :id, :name %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.toggl_project') %></label>
+      <%= f.grouped_collection_select :toggl_project_id, TogglWorkspace.order(:name), :toggl_projects, :name, :id, :name %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.toggl_task') %></label>
+      <%= f.grouped_collection_select :toggl_task_id, TogglProject.order(:name), :toggl_tasks, :name, :id, :name %>
+    </p>
+
+  </div>
+</div>
+
+<%= javascript_include_tag 'console_fallback', :plugin => 'redmine_toggl' %>
+<%= javascript_include_tag 'redmine_toggl_edit', :plugin => 'redmine_toggl' %>
+

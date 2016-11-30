@@ -1,0 +1,27 @@
+
+tr:
+  permission_view_toggl_entries: Toggl kayıtları görme
+  permission_edit_all_toggl_entries: Tüm Toggl kayıtlarını düzenleme
+  redmine_toggl: Redmine Toggl
+  toggl_entries_title: Toggl
+  toggl:
+    all_entries: Tüm Kayıtlar
+    are_you_sure_you_want_to_delete_toggl_entry: "Kaydı hem Redmine hem Toggl'dan silmek istediğinize emin misiniz ?"
+    description: Açıklama
+    duration: Süre
+    first: İlk
+    last: Son
+    my_entries: Kayıtlarım
+    new_toggl_entry: Yeni Toggl Kaydı
+    start: Başlangıç
+    stop: Bitiş
+    time_entry: Zaman Girdisi
+    toggl_entries: Toggl Kayıtları
+    toggl_entry: Toggl Kaydı
+    toggl_entry_created: Toggl kaydı oluşturuldu
+    toggl_entry_deleted: Toggl kaydı silindi
+    toggl_entry_updated: Toggl kaydı güncellendi
+    toggl_project: Proje
+    toggl_task: Görev
+    toggl_workspace: Çalışma Alanı
+

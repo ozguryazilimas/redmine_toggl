@@ -1,0 +1,46 @@
+<div class="redmine_toggl_datatables_wrapper">
+  <table id="toggl_entries_table" class="serverside_datatables" width="100%" cellspacing="0" data-source="<%= data_source %>">
+    <thead>
+      <tr>
+        <th><%= t('toggl.description') %></th>
+        <th><%= t('toggl.toggl_project') %></th>
+        <th class="datatable_no_order"><%= t(:field_issue) %></th>
+        <th class="datatable_no_search"><%= t('toggl.duration') %></th>
+        <th class="datatable_no_search"><%= t('toggl.start') %></th>
+        <% unless for_user %>
+          <th><%= l(:field_user) %></th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+  </table>
+</div>
+
+<script language="javascript" type="text/javascript">
+
+  var datatable_order_index = 4;
+  var datatable_str = {
+    search: "<%= l(:label_search) %>",
+    empty_table: "<%= l(:label_no_results_found) %>",
+    first: "<%= l('toggl.first') %>",
+    last: "<%= l('toggl.last') %>",
+    next: '>>',
+    previous: '<<',
+    info: "<%= l(:label_total) %>: _TOTAL_",
+    yes: "<%= l(:general_text_Yes) %>",
+    no: "<%= l(:general_text_No) %>",
+    all: "<%= l(:label_all) %>"
+  };
+
+</script>
+
+
+<%= javascript_include_tag 'console_fallback', :plugin => 'redmine_toggl' %>
+<%= javascript_include_tag 'dataTables/jquery.dataTables', :plugin => 'redmine_toggl' %>
+<%= javascript_include_tag 'redmine_toggl', :plugin => 'redmine_toggl' %>
+
+<%= stylesheet_link_tag 'dataTables/jquery.dataTables', :plugin => 'redmine_toggl' %>
+<%= stylesheet_link_tag 'redmine_toggl', :plugin => 'redmine_toggl' %>
+

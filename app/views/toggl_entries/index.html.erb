@@ -1,0 +1,12 @@
+<div class="contextual">
+  <% if user_has_toggl_api_key %>
+    <%= link_to l('toggl.new_toggl_entry'), new_toggl_entry_path, :class => 'icon icon-add' %>
+  <% end %>
+
+  <%= link_to l('toggl.all_entries'), all_entries_toggl_entries_path, :class => 'icon icon-projects' %>
+</div>
+
+<h2><%= t('toggl.toggl_entries') %> - <%= l('toggl.my_entries') %></h2>
+
+<%= render :partial => 'toggl_entries', :locals => {:data_source => toggl_entries_path, :for_user => true} %>
+

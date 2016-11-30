@@ -1,0 +1,70 @@
+<% if user_can_edit_toggl_entry(@toggl_entry) %>
+  <div class="contextual">
+    <%= link_to l(:button_edit), edit_toggl_entry_path(@toggl_entry), :class => 'icon icon-edit' %>
+    <%= link_to l(:button_delete), @toggl_entry, :data => {:confirm => l('toggl.are_you_sure_you_want_to_delete_toggl_entry')}, :method => :delete, :class => 'icon icon-del' %>
+  </div>
+<% end %>
+
+<h2><%= l('toggl.toggl_entry') %></h2>
+
+<div class="box tabular">
+  <div>
+    <p>
+      <label><%= l(:field_user) %>: </label>
+      <%= avatar(@toggl_entry.user, :size => 14) %>
+      <%= link_to_user(@toggl_entry.user) %>
+    </p>
+
+    <p>
+      <label><%= l(:field_issue) %>: </label>
+      <%= rt_issue_link(@toggl_entry.issue) %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.description') %></label>
+      <%= @toggl_entry.description %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.duration') %>: </label>
+      <%= rt_format_duration(@toggl_entry.duration) %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.start') %>: </label>
+      <%= format_time(@toggl_entry.start) %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.stop') %>: </label>
+      <%= format_time(@toggl_entry.stop) %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.toggl_workspace') %>: </label>
+      <%= @toggl_entry.toggl_workspace_name %>
+    </p>
+
+    <p>
+      <label><%= l('toggl.toggl_project') %>: </label>
+      <span style="color:<%= @toggl_entry.toggl_project_color %>">
+        <%= @toggl_entry.toggl_project_name %>
+      </span>
+    </p>
+
+    <p>
+      <label><%= l('toggl.toggl_task') %>: </label>
+      <span style="color:<%= @toggl_entry.toggl_project_color %>">
+        <%= @toggl_entry.toggl_task_name %>
+      </span>
+    </p>
+
+    <% if @toggl_entry.time_entry && User.current.allowed_to?(:view_time_entries, @toggl_entry.time_entry.project) %>
+      <p>
+        <label><%= l('toggl.time_entry') %>: </label>
+        <%= rt_time_entry_link(@toggl_entry.time_entry) %>
+      </p>
+    <% end %>
+  </div>
+</div>
+

@@ -1,0 +1,27 @@
+
+en:
+  permission_view_toggl_entries: View Toggl entries
+  permission_edit_all_toggl_entries: Edit all Toggl entries
+  redmine_toggl: Redmine Toggl
+  toggl_entries_title: Toggl
+  toggl:
+    all_entries: All Entries
+    are_you_sure_you_want_to_delete_toggl_entry: "Are you sure you want to delete entry both from Toggl and Redmine ?"
+    description: Description
+    duration: Duration
+    first: First
+    last: Last
+    my_entries: My Entries
+    new_toggl_entry: New Toggl Entry
+    start: Start
+    stop: Stop
+    time_entry: Time Entry
+    toggl_entries: Toggl Entries
+    toggl_entry: Toggl Entry
+    toggl_entry_created: Toggl entry created
+    toggl_entry_deleted: Toggl entry deleted
+    toggl_entry_updated: Toggl entry updated
+    toggl_project: Project
+    toggl_task: Task
+    toggl_workspace: Workspace
+
