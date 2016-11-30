@@ -40,3 +40,18 @@ bower.json
 
 # Ignore Byebug command history file.
 .byebug_history
+
+# temporary editor files
+*.swp
+*~
+.DS_Store
+.idea/
+.env
+.#*
+*.kate-swp
+
+# junk
+.directory
+*.orig
+
+
