@@ -79,8 +79,21 @@ for more information.
 RAILS_ENV=production bundle exec rake toggl:sync_time_entries
 ```
 
-All rake tasks must be run in the Redmine installation location. You can also schedule rake tasks to be run periodically by setting up a cron entry. Cron configuration is dependent on
-the operating system Redmine is installed in and which cron implementation is used, refer to related documentation on how to setup cron. On a system where cron is working properly you can open cron editor to schedule
+You can also give a time range to sync time entries, time values must be in UTC. Note that Toggl API limitations still apply but you can call the rake task multiple times for different
+time ranges to synchronize larger time range. To fetch entries between "2016-01-10 12:00" and "2016-01-11 12:00" use the following command. Blank values will be ignored.
+
+```
+RAILS_ENV=production bundle exec rake toggl:sync_time_entries["2016-01-10 12:00","2016-01-11 12:00"]
+```
+
+All rake tasks must be run in the Redmine installation location.
+
+
+## Scheduling
+
+You can also schedule rake tasks to be run periodically by setting up a cron entry. Cron configuration is dependent on
+the operating system Redmine is installed in and which cron implementation is used, refer to related documentation on
+how to setup cron. On a system where cron is working properly you can open cron editor to schedule
 a rake task execution, the following command will bring up cron editor
 
 ```

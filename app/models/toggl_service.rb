@@ -20,6 +20,7 @@ class TogglService
 
     @user = cfg[:user]
     @apikey = cfg[:apikey]
+    @apiparams = cfg[:apiparams]
     @filter_workspace_id = cfg[:toggl_workspace_id]
 
     setup_initial_values
@@ -34,8 +35,8 @@ class TogglService
   end
 
   def get_toggl_time_entries
-    @toggl_time_entries = @toggl.get_time_entries
-    # @toggl_time_entries = JSON.parse(IO.read('/tmp/sil/toggl/sample_time_entry.json'))
+    args = @apiparams || {}
+    @toggl_time_entries = @toggl.get_time_entries(args)
   end
 
   def get_toggl_workspaces
@@ -140,7 +141,7 @@ class TogglService
     @custom_field_workspace ||= UserCustomField.find_by_name(TOGGL_WORKSPACE)
   end
 
-  def self.sync_toggl_time_entries
+  def self.sync_toggl_time_entries(sync_args = {})
     workspaces = Hash[TogglWorkspace.all.map{|k| [k.name, k.toggl_id]}]
 
     User.active.each do |user|
@@ -152,11 +153,14 @@ class TogglService
       workspace_name = user.toggl_workspace
       workspace_id = workspaces[workspace_name]
 
-      TogglService.new(
+      ts_params = {
         :user => user,
         :apikey => apikey,
         :toggl_workspace_id => workspace_id
-      ).sync_time_entries
+      }
+
+      ts_params[:apiparams] = sync_args if sync_args.present?
+      TogglService.new(ts_params).sync_time_entries
     end
   end
 

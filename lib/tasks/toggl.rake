@@ -1,8 +1,12 @@
 namespace :toggl do
 
   desc 'Sync user time entries'
-  task :sync_time_entries => :environment do
-    TogglService.sync_toggl_time_entries
+  task :sync_time_entries, [:start_date, :end_date] => :environment do |t, args|
+    sync_args = {}
+    sync_args[:start_date] = args[:start_date] if args[:start_date].present?
+    sync_args[:end_date] = args[:end_date] if args[:end_date].present?
+
+    TogglService.sync_toggl_time_entries(sync_args)
   end
 
   desc 'Sync workspace, project and task base data'
