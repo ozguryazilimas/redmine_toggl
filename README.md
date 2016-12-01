@@ -20,8 +20,8 @@ During synchronization Toggl entry descriptions are parsed. If a description has
 created for Redmine issue number used in the hashtag. Hashtag can be anywhere in the description, there should not be space or other characters
 between the hashtag and issue number. All the following descriptions are for Redmine issue number 54321
 
-  investigation for #54321
-  #54321 implement new layout
+    investigation for #54321
+    #54321 implement new layout
 
 If issue number is detected in description, and that issue exists in Redmine, a Redmine time entry will be created for that issue. Duration
 and description (without the issue number part) will be setup in the newly created time entry.
