@@ -47,9 +47,10 @@ and put Redmine Toggl in plugins directory. For example, if you want to use the 
 git clone https://github.com/zaburt/redmine_toggl.git
 ```
 
-Go to your Redmine installation directory and migrate plugins to create the necessary database tables.
+Go to your Redmine installation directory, install necessary gems with bundler and migrate plugins to create the necessary database tables.
 
 ```
+RAILS_ENV=production bundle install
 RAILS_ENV=production bundle exec rake redmine:plugins:migrate
 ```
 
