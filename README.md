@@ -6,8 +6,9 @@
 
 ## Features
 
-* Synchronize Toggl entries for usersi that has Toggl API key set in Redmine
-* Automatically create Redmine time entry for related issue
+* Synchronize Toggl entries for users that has Toggl API key set in Redmine
+* Automatically create / update / delete Redmine time entry for related issue
+* User interface in Redmine for viewing (with search, sort etc. support) and managing entries
 * Create new entry, will create the entry in Toggl and sync to Redmine
 * Edit entries (description, start time, duration, project, task workspace both in Toggl and in Redmine), will also update related Redmine time entry if any
 * Delete entry, will delete from Toggl and Redmine if any. Currently if you delete the entry on Toggl, it is not deleted from Redmine automatically.
