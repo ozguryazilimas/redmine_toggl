@@ -68,9 +68,9 @@ class TogglEntry < ActiveRecord::Base
   end
 
   def update_time_entry
-    issue = Issue.find_by_id(issue_id)
+    issue = Issue.visible(user).find_by_id(issue_id)
 
-    if issue
+    if issue && user.allowed_to?(:log_time, issue.project)
       time_entry_attributes = {
         :project_id => issue.project.id,
         :issue_id => issue.id,
