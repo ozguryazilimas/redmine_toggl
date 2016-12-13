@@ -20,6 +20,18 @@ module RedmineToggl
           custom_field_value(TogglService.custom_field_workspace)
         end
 
+        def toggl_can_view_main_menu
+          allowed_to_globally?(:view_toggl_entries)
+        end
+
+        def toggl_can_view_others_entries
+          allowed_to_globally?(:view_toggl_entries) && allowed_to_globally?(:view_time_entries)
+        end
+
+        def toggl_can_create_toggl_entry
+          toggl_api_key.present?
+        end
+
       end
 
     end

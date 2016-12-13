@@ -4,9 +4,9 @@ class TogglEntriesController < ApplicationController
 
   before_filter :set_toggl_entry, :only => [:show, :edit, :update, :destroy]
   before_filter :authorize_global
-  before_filter :user_has_toggl_api_key, :only => [:create]
+  before_filter :user_can_create_toggl_entry, :only => [:new, :create]
 
-  helper_method :user_has_toggl_api_key, :user_can_edit_toggl_entry, :user_can_edit_all_toggl_entries
+  helper_method :user_can_create_toggl_entry, :user_can_edit_toggl_entry, :user_can_edit_all_toggl_entries
 
 
   def index
@@ -88,8 +88,8 @@ class TogglEntriesController < ApplicationController
     )
   end
 
-  def user_has_toggl_api_key
-    User.current.toggl_api_key.present?
+  def user_can_create_toggl_entry
+    User.current.toggl_can_create_toggl_entry
   end
 
   def user_can_edit_all_toggl_entries
@@ -97,7 +97,7 @@ class TogglEntriesController < ApplicationController
   end
 
   def user_can_edit_toggl_entry(toggl_entry)
-    toggl_entry.user.id == User.current.id || user_can_edit_all_toggl_entries
+    (toggl_entry.user.id == User.current.id) || user_can_edit_all_toggl_entries
   end
 end
 

@@ -1,5 +1,5 @@
 <div class="contextual">
-  <% if user_has_toggl_api_key %>
+  <% if user_can_create_toggl_entry %>
     <%= link_to l('toggl.new_toggl_entry'), new_toggl_entry_path, :class => 'icon icon-add' %>
   <% end %>
 

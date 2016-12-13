@@ -36,7 +36,7 @@ Redmine::Plugin.register :redmine_toggl do
     :action => 'index'
   },
   :caption => :toggl_entries_title,
-  :if => Proc.new{User.current.allowed_to_globally?(:view_toggl_entries)}
+  :if => Proc.new{User.current.toggl_can_view_main_menu}
 
 end
 
