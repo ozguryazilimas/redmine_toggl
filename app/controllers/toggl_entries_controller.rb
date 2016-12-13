@@ -5,8 +5,10 @@ class TogglEntriesController < ApplicationController
   before_filter :set_toggl_entry, :only => [:show, :edit, :update, :destroy]
   before_filter :authorize_global
   before_filter :user_can_create_toggl_entry, :only => [:new, :create]
+  before_filter :user_can_view_others_entries, :only => [:all_entries]
 
-  helper_method :user_can_create_toggl_entry, :user_can_edit_toggl_entry, :user_can_edit_all_toggl_entries
+  helper_method :user_can_create_toggl_entry, :user_can_edit_toggl_entry, :user_can_edit_all_toggl_entries,
+    :user_can_view_others_entries
 
 
   def index
@@ -32,6 +34,7 @@ class TogglEntriesController < ApplicationController
   end
 
   def show
+    raise Unauthorized unless user_can_view_toggl_entry(@toggl_entry)
   end
 
   def new
@@ -50,6 +53,7 @@ class TogglEntriesController < ApplicationController
   end
 
   def edit
+    raise Unauthorized unless user_can_edit_toggl_entry(@toggl_entry)
   end
 
   def update
@@ -98,6 +102,14 @@ class TogglEntriesController < ApplicationController
 
   def user_can_edit_toggl_entry(toggl_entry)
     (toggl_entry.user.id == User.current.id) || user_can_edit_all_toggl_entries
+  end
+
+  def user_can_view_toggl_entry(toggl_entry)
+    (toggl_entry.user.id == User.current.id) || user_can_view_others_entries
+  end
+
+  def user_can_view_others_entries
+    User.current.toggl_can_view_others_entries
   end
 end
 

@@ -3,7 +3,9 @@
     <%= link_to l('toggl.new_toggl_entry'), new_toggl_entry_path, :class => 'icon icon-add' %>
   <% end %>
 
-  <%= link_to l('toggl.all_entries'), all_entries_toggl_entries_path, :class => 'icon icon-projects' %>
+  <% if user_can_view_others_entries %>
+    <%= link_to l('toggl.all_entries'), all_entries_toggl_entries_path, :class => 'icon icon-projects' %>
+  <% end %>
 </div>
 
 <h2><%= t('toggl.toggl_entries') %> - <%= l('toggl.my_entries') %></h2>
