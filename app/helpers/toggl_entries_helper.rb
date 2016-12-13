@@ -3,12 +3,22 @@ module TogglEntriesHelper
 
   def rt_issue_link(issue)
     return '' unless issue
-    link_to_issue(issue)
+
+    if issue.visible?(User.current)
+      link_to_issue(issue)
+    else
+      "##{issue.id}"
+    end
   end
 
   def rt_time_entry_link(time_entry)
     return '' unless time_entry
-    link_to("##{time_entry.id}", edit_time_entry_path(time_entry))
+
+    if time_entry.editable_by?(User.current)
+      link_to("##{time_entry.id}", edit_time_entry_path(time_entry))
+    else
+      "##{time_entry.id}"
+    end
   end
 
   def rt_user_link(user)
