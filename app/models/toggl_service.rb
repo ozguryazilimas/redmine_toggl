@@ -47,7 +47,8 @@ class TogglService
     @toggl_projects = []
 
     TogglWorkspace.pluck(:toggl_id).each do |ws_id|
-      @toggl_projects += @toggl.projects(ws_id)
+      ws_projects = @toggl.projects(ws_id)
+      @toggl_projects += ws_projects if ws_projects.present?
     end
   end
 
@@ -55,7 +56,8 @@ class TogglService
     @toggl_tasks = []
 
     TogglWorkspace.pluck(:toggl_id).each do |ws_id|
-      @toggl_tasks += @toggl.tasks(ws_id)
+      ws_tasks = @toggl.tasks(ws_id)
+      @toggl_tasks += ws_tasks if ws_tasks.present?
     end
   end
 
