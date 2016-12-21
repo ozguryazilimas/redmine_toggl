@@ -63,29 +63,29 @@ class TogglEntry < ActiveRecord::Base
   def delete_time_entry
     return unless issue_id_changed?
 
-    time_entry.destroy if time_entry
+    self.time_entry.destroy if self.time_entry
     self.time_entry_id = nil
   end
 
   def update_time_entry
-    issue = Issue.visible(user).find_by_id(issue_id)
+    self.issue = Issue.visible(self.user).find_by_id(issue_id)
 
-    if issue && user.allowed_to?(:log_time, issue.project)
+    if self.issue && self.user.allowed_to?(:log_time, self.issue.project)
       time_entry_attributes = {
-        :project_id => issue.project.id,
-        :issue_id => issue.id,
-        :user => user,
+        :project_id => self.issue.project.id,
+        :issue_id => self.issue.id,
+        :user => self.user,
         :hours => duration.to_f / 3600,
         :spent_on => start,
         :comments => description
       }
 
-      time_entry ||= build_time_entry
-      time_entry.assign_attributes(time_entry_attributes)
-      time_entry.save! if time_entry.changed?
+      self.time_entry ||= build_time_entry
+      self.time_entry.assign_attributes(time_entry_attributes)
+      self.time_entry.save! if self.time_entry.changed?
     else
       # we only create time_entries for issues, so if no issue, no time_entry
-      time_entry.destroy if time_entry
+      self.time_entry.destroy if self.time_entry
       self.time_entry_id = nil
     end
   end
