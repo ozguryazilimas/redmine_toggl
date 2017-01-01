@@ -101,15 +101,30 @@ class TogglEntriesController < ApplicationController
   end
 
   def user_can_edit_toggl_entry(toggl_entry)
-    (toggl_entry.user.id == User.current.id) || user_can_edit_all_toggl_entries
+    return true if user_can_edit_all_toggl_entries
+    user_can_edit_own_entries(toggl_entry)
   end
 
   def user_can_view_toggl_entry(toggl_entry)
-    (toggl_entry.user.id == User.current.id) || user_can_view_others_entries
+    return true if user_can_view_others_entries
+    toggl_entry.user.id == User.current.id
   end
 
   def user_can_view_others_entries
     User.current.toggl_can_view_others_entries
+  end
+
+  def user_can_edit_own_entries(toggl_entry)
+    usr = User.current
+    time_entry = toggl_entry.time_entry
+    # if no time_entry then there is no issue, so we do not know which project this is for
+    return true unless time_entry
+
+    project = time_entry.project
+    # allow if the user can edit all time_entries in the project
+    return true if usr.allowed_to?(:edit_time_entries, project)
+
+    (toggl_entry.user.id == usr.id) && usr.allowed_to?(:edit_own_time_entries, project)
   end
 end
 
