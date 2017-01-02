@@ -31,6 +31,14 @@ Redmine::Plugin.register :redmine_toggl do
   },
   :require => :loggedin
 
+  permission :toggl_log_time_to_all_issues, {
+    :toggl_entries => [
+      :update,
+      :destroy
+    ]
+  },
+  :require => :loggedin
+
   menu :top_menu, :toggl_entries, {
     :controller => 'toggl_entries',
     :action => 'index'

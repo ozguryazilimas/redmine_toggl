@@ -114,6 +114,7 @@ Manage what users can do with Redmine permissions.
 
 * View Toggl entries: Has access to view Toggl entries. Also can edit / create / update if **Toggl API key** is set for user.
 * Edit all Toggl entries: Update or delete Toggl entries of other users. Changes will be synchronized to Toggl as the entries original creator.
+* Create Toggl time entry to all issues: Allows creating time entries for issues that are not visible to user. Without this permission, even if the issue number in description is found in the system, we do not create time entry.
 
 
 ## License

@@ -2,6 +2,7 @@
 tr:
   permission_view_toggl_entries: Toggl kayıtları görme
   permission_edit_all_toggl_entries: Tüm Toggl kayıtlarını düzenleme
+  permission_toggl_log_time_to_all_issues: Tüm işlere Toggl zaman kaydı oluşturma
   redmine_toggl: Redmine Toggl
   toggl_entries_title: Toggl
   toggl:

@@ -2,6 +2,7 @@
 en:
   permission_view_toggl_entries: View Toggl entries
   permission_edit_all_toggl_entries: Edit all Toggl entries
+  permission_toggl_log_time_to_all_issues: Create Toggl time entry to all issues
   redmine_toggl: Redmine Toggl
   toggl_entries_title: Toggl
   toggl:
