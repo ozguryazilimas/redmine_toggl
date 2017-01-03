@@ -1,3 +1,4 @@
+require 'redmine'
 require 'redmine_toggl'
 
 Redmine::Plugin.register :redmine_toggl do
