@@ -40,7 +40,7 @@ class TogglEntry < ActiveRecord::Base
 
     opts = {
       'description' => description,
-      'start' => start,
+      'start' => start.try(:iso8601),
       'duration' => duration
     }
 

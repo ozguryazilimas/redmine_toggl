@@ -125,7 +125,7 @@ class TogglService
   end
 
   def update_time_entry(opts)
-    toggl_id = opts[:toggl_id]
+    toggl_id = opts.with_indifferent_access[:toggl_id].to_i
     time_entry_opts = parse_api_opts(opts)
     populate_toggl_base
 
