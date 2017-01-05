@@ -68,7 +68,7 @@ class TogglEntry < ActiveRecord::Base
   end
 
   def update_time_entry
-    self.issue = Issue.visible(self.user).find_by_id(issue_id)
+    self.issue = Issue.find_by_id(issue_id)
 
     if self.issue &&
       (self.user.allowed_to?(:log_time, self.issue.project) ||
@@ -89,6 +89,7 @@ class TogglEntry < ActiveRecord::Base
       # we only create time_entries for issues, so if no issue, no time_entry
       self.time_entry.destroy if self.time_entry
       self.time_entry_id = nil
+      self.issue_id = nil
     end
   end
 
