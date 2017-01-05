@@ -72,7 +72,7 @@ class TogglEntry < ActiveRecord::Base
 
     if self.issue &&
       (self.user.allowed_to?(:log_time, self.issue.project) ||
-       self.user.allowed_to?(:toggl_log_time_to_all_issues, self.issue.project))
+       self.user.toggl_can_log_time_to_all_issues)
       time_entry_attributes = {
         :project_id => self.issue.project.id,
         :issue_id => self.issue.id,

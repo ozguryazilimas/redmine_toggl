@@ -32,6 +32,10 @@ module RedmineToggl
           toggl_api_key.present?
         end
 
+        def toggl_can_log_time_to_all_issues
+          allowed_to_globally?(:toggl_log_time_to_all_issues)
+        end
+
       end
 
     end
