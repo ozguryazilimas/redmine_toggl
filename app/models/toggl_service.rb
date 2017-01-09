@@ -77,6 +77,7 @@ class TogglService
 
   def save_toggl_entry_from_toggl_data(raw_entry)
     entry = format_time_entry(raw_entry)
+    return if entry['duration'].to_id < 1
 
     toggl_entry = TogglEntry.find_or_initialize_by(:toggl_id => entry['toggl_id'])
     toggl_entry.assign_attributes(entry)
