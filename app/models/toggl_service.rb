@@ -96,6 +96,10 @@ class TogglService
     @toggl_time_entries.each do |entry|
       # skip if user requested workspace and time entry workspace does not match
       next if @filter_workspace_id && entry['wid'] != @filter_workspace_id
+
+      # ignore time entries that are not finished yet
+      next if entry['stop'].to_s.empty?
+
       save_toggl_entry_from_toggl_data(entry)
     end
   end
