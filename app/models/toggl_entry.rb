@@ -79,7 +79,7 @@ class TogglEntry < ActiveRecord::Base
         :user => self.user,
         :hours => duration.to_f / 3600,
         :spent_on => start,
-        :comments => description.gsub(ISSUE_MATCHER, ' ')
+        :comments => description.gsub(ISSUE_MATCHER, ' ').strip
       }
 
       self.time_entry ||= build_time_entry
