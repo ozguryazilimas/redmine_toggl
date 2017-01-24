@@ -117,14 +117,19 @@ class TogglEntriesController < ApplicationController
   def user_can_edit_own_entries(toggl_entry)
     usr = User.current
     time_entry = toggl_entry.time_entry
+    user_owns_entry = toggl_entry.user.id == usr.id
     # if no time_entry then there is no issue, so we do not know which project this is for
-    return true unless time_entry
+    return user_owns_entry unless time_entry
 
     project = time_entry.project
     # allow if the user can edit all time_entries in the project
     return true if usr.allowed_to?(:edit_time_entries, project)
 
-    (toggl_entry.user.id == usr.id) && usr.allowed_to?(:edit_own_time_entries, project)
+    # if user can not edit others entries, and does not own the entry, they can not edit it
+    return false unless user_owns_entry
+
+    # user owns the entry, see if they can edit their own entry
+    return usr.allowed_to?(:edit_own_time_entries, project)
   end
 end
 
