@@ -63,6 +63,7 @@ class TogglService
 
   def format_time_entry(entry)
     entry.delete('duronly')
+    entry.delete('tags')
     entry['toggl_id'] = entry.delete('id')
     entry['user_id'] = @user.id
 
