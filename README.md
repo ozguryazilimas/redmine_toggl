@@ -91,7 +91,7 @@ To receive list of Toggl Entries that are not associated with a Redmine issue yo
 Hours option decides Toggl Entries started since how many hours ago. Recipients can be multiple email address comma separated. Language is optional, default is Redmine default.
 
 ```
-RAILS_ENV=production bundle exec rake toggl:report_without_issue[24,"user1@example.com,user2@example.com","en"]
+RAILS_ENV=production bundle exec rake toggl:report_without_issue[24,"bob@example.com,john@example.com","en"]
 ```
 
 All rake tasks must be run in the Redmine installation location.
