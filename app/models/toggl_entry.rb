@@ -3,6 +3,7 @@ class TogglEntry < ActiveRecord::Base
 
   ISSUE_MATCHER = /\s*#(\d+)\s*/
   DEFAULT_COLOR = '#000000'
+  EMAIL_VALIDATOR = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
 
   belongs_to :user
   belongs_to :issue
@@ -15,9 +16,17 @@ class TogglEntry < ActiveRecord::Base
   scope :without_issue, -> {where(:issue_id => nil)}
   scope :for_user, -> (user) {where(:user_id => user)}
   scope :for_issue, -> (issue) {where(:issue_id => issue)}
+  scope :order_by_start, -> {order(:start)}
+  scope :order_by_user, -> {joins(:user).order('users.firstname, users.lastname')}
+  scope :start_after, -> (timeval) {where('start > ?', timeval) if timeval}
+  scope :missing_issue, -> {without_issue.order_by_start.order_by_user}
 
   validates_presence_of :user_id, :toggl_id
 
+
+  def self.report_without_issue(start_after = nil)
+    missing_issue.start_after(start_after).group_by{|k| k.user.name}
+  end
 
   def toggl_project_color
     toggl_project.try(:hex_color) || DEFAULT_COLOR

@@ -51,7 +51,8 @@ end
 
 Rails.configuration.to_prepare do
   [
-    [User, RedmineToggl::Patches::UserPatch]
+    [User, RedmineToggl::Patches::UserPatch],
+    [Mailer, RedmineToggl::Patches::MailerPatch]
   ].each do |classname, modulename|
     unless classname.included_modules.include?(modulename)
       classname.send(:include, modulename)
