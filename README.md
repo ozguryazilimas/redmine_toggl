@@ -87,6 +87,13 @@ time ranges to synchronize larger time range. To fetch entries between "2016-01-
 RAILS_ENV=production bundle exec rake toggl:sync_time_entries["2016-01-10 12:00","2016-01-11 12:00"]
 ```
 
+To receive list of Toggl Entries that are not associated with a Redmine issue you can run the following rake task. Args are in the format of "hours,recipients,language".
+Hours option decides Toggl Entries started since how many hours ago. Recipients can be multiple email address comma separated. Language is optional, default is Redmine default.
+
+```
+RAILS_ENV=production bundle exec rake toggl:report_without_issue[24,"user1@example.com,user2@example.com","en"]
+```
+
 All rake tasks must be run in the Redmine installation location.
 
 
