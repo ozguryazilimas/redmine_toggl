@@ -3,7 +3,7 @@
   <%= l('toggl.toggl_report_no_match_found') %>
 <% else %>
   <% report_data.each do |user, entries| %>
-    * <%= user %></b>
+    * <%= user %>
       <% entries.each do |entry| %>
 
         <%= t('toggl.start') %>: <%= format_time(entry.start) %>
