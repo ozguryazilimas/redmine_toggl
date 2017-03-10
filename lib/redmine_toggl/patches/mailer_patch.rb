@@ -18,6 +18,7 @@ module RedmineToggl
         def toggl_report_without_issue(recipients, report_results, language = nil)
           @report_data = report_results
           I18n.locale = language if language
+          redmine_headers 'Report' => 'toggl_entries_without_issue'
 
           mail :to => recipients, :subject => t('toggl.toggl_report_without_issue_subject')
         end
