@@ -26,5 +26,6 @@ tr:
     toggl_task: Görev
     toggl_workspace: Çalışma Alanı
     toggl_report_without_issue_subject: Redmine İş Kaydı Olmayan Toggl Kayıtları
+    toggl_report_without_project_subject: Redmine Toggl Projesi Olmayan Toggl Kayıtları
     toggl_report_no_match_found: Eşleşen kayıt bulunamadı
 

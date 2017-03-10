@@ -94,6 +94,12 @@ Hours option decides Toggl Entries started since how many hours ago. Recipients 
 RAILS_ENV=production bundle exec rake toggl:report_without_issue[24,"bob@example.com|john@example.com","en"]
 ```
 
+You can also get the same report for Toggl Entries that do not have Toggl Project selected
+
+```
+RAILS_ENV=production bundle exec rake toggl:report_without_project[24,"bob@example.com|john@example.com","en"]
+```
+
 All rake tasks must be run in the Redmine installation location.
 
 

@@ -26,5 +26,6 @@ en:
     toggl_task: Task
     toggl_workspace: Workspace
     toggl_report_without_issue_subject: Redmine Toggl Entries Without Issue
+    toggl_report_without_project_subject: Redmine Toggl Entries Without Toggl Project
     toggl_report_no_match_found: No match found
 

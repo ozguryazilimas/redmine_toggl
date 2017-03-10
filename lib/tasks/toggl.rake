@@ -59,5 +59,27 @@ namespace :toggl do
     results = TogglEntry.report_without_issue(hours_ago)
     Mailer.toggl_report_without_issue(recipients, results, language).deliver
   end
+
+  desc 'Sends email with a list of Toggl entries that are not assigned to a Toggl Project'
+  task :report_without_project, [:hours_ago, :recipients, :language] => :environment do |t, args|
+    hours_ago = args[:hours_ago].to_i > 0 ? args[:hours_ago].to_i.hours.ago : nil
+    recipients = args[:recipients].to_s.split('|')
+    language = args[:language]
+
+    if recipients.blank?
+      puts 'Please provide recipient email address, you can provide multiple address pipe "|" separated'
+      exit
+    else
+      recipients.each do |recipient|
+        next unless recipient.match(TogglEntry::EMAIL_VALIDATOR).nil?
+
+        puts "Invalid email address #{recipient.inspect}"
+        exit
+      end
+    end
+
+    results = TogglEntry.report_without_project(hours_ago)
+    Mailer.toggl_report_without_project(recipients, results, language).deliver
+  end
 end
 

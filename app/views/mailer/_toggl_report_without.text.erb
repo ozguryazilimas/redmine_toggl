@@ -1,0 +1,19 @@
+
+<% if report_data.blank? %>
+  <%= l('toggl.toggl_report_no_match_found') %>
+<% else %>
+  <% report_data.each do |user, entries| %>
+    * <%= user %></b>
+      <% entries.each do |entry| %>
+
+        <%= t('toggl.start') %>: <%= format_time(entry.start) %>
+        <%= t('toggl.duration') %>: <%= rt_format_duration(entry.duration) %>
+        <%= t('toggl.description') %>: <%= entry.description %>
+        <%= t('toggl.toggl_entry') %>: <%= toggl_entry_url(entry) %>
+      <% end %>
+
+    --------------------------------------------------------------------------------
+
+  <% end %>
+<% end %>
+

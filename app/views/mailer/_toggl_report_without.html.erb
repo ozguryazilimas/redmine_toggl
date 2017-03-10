@@ -1,0 +1,70 @@
+<style>
+table#toggl_report_without_issue {
+  padding: 10px;
+  width: 100%;
+  white-space: pre-wrap;
+  border-collapse: collapse;
+}
+
+table#toggl_report_without_issue th {
+  border: 1px solid black;
+  height: 25px;
+  text-align: left;
+  padding: 10px;
+  background-color: #C9FFF1;
+}
+
+table#toggl_report_without_issue td {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+table#toggl_report_without_issue tr:nth-child(even) {
+  background-color: #F2F2F2;
+}
+
+table#toggl_report_without_issue tr:hover {
+  background-color: #E5E5E5 !important;
+}
+
+div#toggl_report_without_issue_user {
+  font-weight: bold;
+  padding: 15px;
+  font-size: 120%;
+}
+</style>
+
+<% if report_data.blank? %>
+  <br>
+  <p>
+    <%= l('toggl.toggl_report_no_match_found') %>
+  </p>
+<% else %>
+  <% report_data.each do |user, entries| %>
+    <div id="toggl_report_without_issue_user">
+      <%= user %>
+    </div>
+    <table id="toggl_report_without_issue">
+      <thead>
+        <tr>
+          <th><%= t('toggl.start') %></th>
+          <th><%= t('toggl.duration') %></th>
+          <th><%= t('toggl.description') %></th>
+          <th><%= t('toggl.toggl_entry') %></th>
+        </tr>
+      <tbody>
+        <% entries.each do |entry| %>
+          <tr>
+            <td><%= format_time(entry.start) %></td>
+            <td><%= rt_format_duration(entry.duration) %></td>
+            <td><%= entry.description %></td>
+            <td><%= link_to toggl_entry_url(entry), entry %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    <table>
+    <hr>
+    <br>
+  <% end %>
+<% end %>
+

@@ -23,6 +23,14 @@ module RedmineToggl
           mail :to => recipients, :subject => t('toggl.toggl_report_without_issue_subject')
         end
 
+        def toggl_report_without_project(recipients, report_results, language = nil)
+          @report_data = report_results
+          I18n.locale = language if language
+          redmine_headers 'Report' => 'toggl_entries_without_project'
+
+          mail :to => recipients, :subject => t('toggl.toggl_report_without_project_subject')
+        end
+
       end
     end
   end
