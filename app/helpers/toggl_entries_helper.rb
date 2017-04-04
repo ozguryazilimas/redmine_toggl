@@ -22,7 +22,13 @@ module TogglEntriesHelper
   end
 
   def rt_user_link(user)
-    link_to_user(user) if user
+    return '' if user.blank?
+    return h(user.to_s) unless user.is_a?(User)
+
+    name = h(user.name)
+    return name unless user.active? || (User.current.admin? && user.logged?)
+
+    link_to name, filter_by_user_toggl_entries_path(:filter_user_id => user.id), :class => user.css_classes
   end
 
   def rt_format_duration(total_seconds)

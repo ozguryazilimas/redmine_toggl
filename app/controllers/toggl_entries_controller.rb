@@ -5,15 +5,14 @@ class TogglEntriesController < ApplicationController
   before_filter :set_toggl_entry, :only => [:show, :edit, :update, :destroy]
   before_filter :authorize_global
   before_filter :user_can_create_toggl_entry, :only => [:new, :create]
-  before_filter :user_can_view_others_entries, :only => [:all_entries]
+  before_filter :user_can_view_others_entries, :only => [:all_entries, :filter_by_user]
+  before_filter :set_user, :only => [:index, :all_entries, :filter_by_user]
 
   helper_method :user_can_create_toggl_entry, :user_can_edit_toggl_entry, :user_can_edit_all_toggl_entries,
     :user_can_view_others_entries
 
 
   def index
-    @user = User.current
-
     respond_to do |format|
       format.html
       format.json {
@@ -23,12 +22,21 @@ class TogglEntriesController < ApplicationController
   end
 
   def all_entries
-    @user = User.current
-
     respond_to do |format|
       format.html
       format.json {
         render :json => TogglEntriesDatatable.new(TogglEntry, view_context)
+      }
+    end
+  end
+
+  def filter_by_user
+    @filter_user = User.find(params[:filter_user_id])
+
+    respond_to do |format|
+      format.html
+      format.json {
+        render :json => TogglEntriesDatatable.new(TogglEntry, view_context, @filter_user.id)
       }
     end
   end
@@ -80,6 +88,10 @@ class TogglEntriesController < ApplicationController
   end
 
   private
+
+  def set_user
+    @user = User.current
+  end
 
   def set_toggl_entry
     @toggl_entry = TogglEntry.find(params[:id])

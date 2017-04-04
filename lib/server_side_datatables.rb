@@ -18,7 +18,7 @@ class ServerSideDatatables
   def initialize(klass, view, for_user = nil)
     @klass = klass
     @view = view
-    @for_user = for_user
+    @for_user = for_user if for_user.present?
   end
 
   def as_json(_options = {})

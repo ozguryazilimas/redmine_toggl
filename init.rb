@@ -14,6 +14,7 @@ Redmine::Plugin.register :redmine_toggl do
     :toggl_entries => [
       :index,
       :all_entries,
+      :filter_by_user,
       :show,
       :new,
       :create,
