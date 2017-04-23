@@ -8,6 +8,7 @@
 
 * Synchronize Toggl entries for users that has Toggl API key set in Redmine
 * Automatically create / update / delete Redmine time entry for related issue
+* Time entry activities can be mapped to tags on Toggl entries. You can define which Toggl tag matches which Redmine time entry activity on Redmine Admin plugin settings page.
 * User interface in Redmine for viewing (with search, sort etc. support) and managing entries
 * Create new entry, will create the entry in Toggl and sync to Redmine
 * Edit entries (description, start time, duration, project, task workspace both in Toggl and in Redmine), will also update related Redmine time entry if any
