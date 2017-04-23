@@ -23,9 +23,13 @@ tr:
     toggl_entry_deleted: Toggl kaydı silindi
     toggl_entry_updated: Toggl kaydı güncellendi
     toggl_project: Proje
+    toggl_tags: Etiketler
     toggl_task: Görev
     toggl_workspace: Çalışma Alanı
     toggl_report_without_issue_subject: Redmine İş Kaydı Olmayan Toggl Kayıtları
     toggl_report_without_project_subject: Redmine Toggl Projesi Olmayan Toggl Kayıtları
     toggl_report_no_match_found: Eşleşen kayıt bulunamadı
+    settings:
+      header: Redmine Toggl Ayarları
+      info: Hangi Toggl etiketlerinin hangi Redmine zaman aktivitesine karşılık geleceğini seçiniz. Birden fazla Toggl etiketi virgül ile ayrılarak yazılabilir.
 

@@ -23,9 +23,13 @@ en:
     toggl_entry_deleted: Toggl entry deleted
     toggl_entry_updated: Toggl entry updated
     toggl_project: Project
+    toggl_tags: Tags
     toggl_task: Task
     toggl_workspace: Workspace
     toggl_report_without_issue_subject: Redmine Toggl Entries Without Issue
     toggl_report_without_project_subject: Redmine Toggl Entries Without Toggl Project
     toggl_report_no_match_found: No match found
+    settings:
+      header: Redmine Toggl Settings
+      info: Select which Toggl tags should map to which time entry activities. Multiple Toggl tags can be written comma separated.
 

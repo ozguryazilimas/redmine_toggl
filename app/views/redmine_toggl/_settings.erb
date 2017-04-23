@@ -1,0 +1,20 @@
+<fieldset class="box">
+  <legend>
+    <b>
+      <%= l('toggl.settings.header') %>
+    </b>
+  </legend>
+
+  <div class="tabular settings">
+    <%= h l('toggl.settings.info') %>
+    <br><br>
+
+    <% TimeEntryActivity.order(:name).pluck(:name, :id).each do |name, id| %>
+      <p>
+        <%= content_tag :label, name %>
+        <%= text_field_tag "settings[activity][#{id}]", settings['activity'][id.to_s], :size => 60 %>
+      </p>
+    <% end %>
+  </div>
+</fieldset>
+

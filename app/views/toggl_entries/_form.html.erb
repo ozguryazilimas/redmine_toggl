@@ -36,6 +36,11 @@
       <%= f.grouped_collection_select :toggl_task_id, TogglProject.order(:name), :toggl_tasks, :name, :id, :name %>
     </p>
 
+    <p>
+      <label><%= l('toggl.toggl_tags') %></label>
+      <%= f.text_field :toggl_tags, :size => 80, :label => '' %>
+    </p>
+
   </div>
 </div>
 

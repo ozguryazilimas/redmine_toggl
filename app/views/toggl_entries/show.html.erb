@@ -59,6 +59,11 @@
       </span>
     </p>
 
+    <p>
+      <label><%= l('toggl.toggl_tags') %>: </label>
+      <%= @toggl_entry.toggl_tags.join(',') %>
+    </p>
+
     <% if @toggl_entry.time_entry && User.current.allowed_to?(:view_time_entries, @toggl_entry.time_entry.project) %>
       <p>
         <label><%= l('toggl.time_entry') %>: </label>

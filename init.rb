@@ -48,6 +48,10 @@ Redmine::Plugin.register :redmine_toggl do
   :caption => :toggl_entries_title,
   :if => Proc.new{User.current.toggl_can_view_main_menu}
 
+  settings :partial => 'redmine_toggl/settings',
+    :default => {
+      'activty' => {}
+    }
 end
 
 Rails.configuration.to_prepare do
@@ -59,6 +63,5 @@ Rails.configuration.to_prepare do
       classname.send(:include, modulename)
     end
   end
-
 end
 

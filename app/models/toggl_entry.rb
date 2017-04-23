@@ -4,6 +4,9 @@ class TogglEntry < ActiveRecord::Base
   ISSUE_MATCHER = /\s*#(\d+)\s*/
   DEFAULT_COLOR = '#000000'
   EMAIL_VALIDATOR = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+  TOGGL_TAG_SEPARATOR = ','
+
+  serialize :toggl_tags, Array
 
   belongs_to :user
   belongs_to :issue
@@ -62,6 +65,7 @@ class TogglEntry < ActiveRecord::Base
     opts['wid'] = toggl_workspace.try(:toggl_id)
     opts['pid'] = toggl_project.try(:toggl_id)
     opts['tid'] = toggl_task.try(:toggl_id)
+    opts['tags'] = toggl_tags || []
 
     opts
   end
@@ -88,6 +92,7 @@ class TogglEntry < ActiveRecord::Base
     if self.issue &&
       (self.user.allowed_to?(:log_time, self.issue.project) ||
        self.user.toggl_can_log_time_to_all_issues)
+
       time_entry_attributes = {
         :project_id => self.issue.project.id,
         :issue_id => self.issue.id,
@@ -96,6 +101,9 @@ class TogglEntry < ActiveRecord::Base
         :spent_on => start,
         :comments => description.gsub(ISSUE_MATCHER, ' ').strip
       }
+
+      related_activity = RedmineToggl.activity_for_tags(toggl_tags)
+      time_entry_attributes[:activity_id] = related_activity if related_activity.present?
 
       self.time_entry ||= build_time_entry
       self.time_entry.assign_attributes(time_entry_attributes)

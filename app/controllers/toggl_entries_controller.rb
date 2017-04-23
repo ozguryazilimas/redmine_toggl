@@ -7,6 +7,7 @@ class TogglEntriesController < ApplicationController
   before_filter :user_can_create_toggl_entry, :only => [:new, :create]
   before_filter :user_can_view_others_entries, :only => [:all_entries, :filter_by_user]
   before_filter :set_user, :only => [:index, :all_entries, :filter_by_user]
+  before_filter :parse_toggl_tags, :only => [:create, :update]
 
   helper_method :user_can_create_toggl_entry, :user_can_edit_toggl_entry, :user_can_edit_all_toggl_entries,
     :user_can_view_others_entries
@@ -97,10 +98,14 @@ class TogglEntriesController < ApplicationController
     @toggl_entry = TogglEntry.find(params[:id])
   end
 
+  def parse_toggl_tags
+    params[:toggl_entry][:toggl_tags] = params[:toggl_entry][:toggl_tags].split(TogglEntry::TOGGL_TAG_SEPARATOR)
+  end
+
   def toggl_entry_params
     params.require(:toggl_entry).permit(
       :description, :start, :stop, :duration, :toggl_id, :user_id,
-      :toggl_workspace_id, :toggl_project_id, :toggl_task_id
+      :toggl_workspace_id, :toggl_project_id, :toggl_task_id, :toggl_tags => []
     )
   end
 
