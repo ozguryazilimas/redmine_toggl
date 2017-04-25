@@ -13,6 +13,7 @@ class TogglService
   def initialize(cfg = {})
     @config = cfg
     @debug = cfg[:debug] || false
+    @remove_missing = cfg[:remove_missing] || false
     @toggl_time_entries = []
     @toggl_workspaces = []
     @toggl_projects = []
@@ -105,9 +106,47 @@ class TogglService
     end
   end
 
+  def remove_missing_toggl_time_entries
+    # we will check integrity of data between first and last entries, if we have less
+    # than 3 total data, then there is nothing in between that we care about
+    return if @toggl_time_entries.count < 3
+
+    start_time = @toggl_time_entries.first['start']
+    end_time = @toggl_time_entries.last['start']
+    remote_ids = @toggl_time_entries.map{|k| k['toggl_id']}
+
+    # find entries that might be deleted from Toggl, but not from Redmine
+    might_be_deleted = TogglEntry.where('start >= ?', Time.parse(start_time))
+                                 .where('start <= ?', Time.parse(end_time))
+                                 .where.not(:toggl_id => remote_ids)
+
+    might_be_deleted.each do |entry|
+      should_delete = false
+
+      begin
+        entry_data = @toggl.get_time_entry(entry.toggl_id)
+
+        # if you fetch with get_time_entries, Toggl does not return deleted ones
+        # but if get just one by hand you can detect if it was deleted
+        should_delete = entry_data['server_deleted_at'].present?
+      rescue RuntimeError => e
+        Rails.logger.error "Trying to detect if Toggl entry with toggl_id #{entry.toggl_id} was deleted " \
+          "but instead received #{e.message}"
+      end
+
+      next unless should_delete
+
+      TogglEntry.transaction do
+        entry.time_entry.try(:destroy)
+        entry.destroy
+      end
+    end
+  end
+
   def sync_time_entries
     get_toggl_time_entries
     save_toggl_time_entries
+    remove_missing_toggl_time_entries if @remove_missing
   end
 
   def delete_time_entry(entry_id)
@@ -149,8 +188,8 @@ class TogglService
     @custom_field_workspace ||= UserCustomField.find_by_name(TOGGL_WORKSPACE)
   end
 
-  def self.sync_toggl_time_entries(sync_args = {})
-    workspaces = Hash[TogglWorkspace.all.map{|k| [k.name, k.toggl_id]}]
+  def self.sync_toggl_time_entries(sync_args = {}, check_missing = false)
+    workspaces = TogglWorkspace.pluck(:name, :toggl_id).to_h
 
     User.active.each do |user|
       next if user.locked?
@@ -164,7 +203,8 @@ class TogglService
       ts_params = {
         :user => user,
         :apikey => apikey,
-        :toggl_workspace_id => workspace_id
+        :toggl_workspace_id => workspace_id,
+        :remove_missing => check_missing
       }
 
       ts_params[:apiparams] = sync_args if sync_args.present?

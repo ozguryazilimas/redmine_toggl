@@ -9,6 +9,15 @@ namespace :toggl do
     TogglService.sync_toggl_time_entries(sync_args)
   end
 
+  desc 'Sync user time entries and remove entries still in Redmine but deleted from Toggl'
+  task :sync_time_entries_remove_missing, [:start_date, :end_date] => :environment do |t, args|
+    sync_args = {}
+    sync_args[:start_date] = args[:start_date] if args[:start_date].present?
+    sync_args[:end_date] = args[:end_date] if args[:end_date].present?
+
+    TogglService.sync_toggl_time_entries(sync_args, true)
+  end
+
   desc 'Sync workspace, project and task base data'
   task :sync_base_data, [:user] => :environment do |t, args|
     user_login = args[:user]
