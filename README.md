@@ -92,11 +92,16 @@ Currently Toggl does not provide information on deleted entries if you are fetch
 that were deleted from Toggl but that are still in Redmine. If you want to delete these entries from Redmine too you can try the sync_time_entries_remove_missing
 task, which will first do what sync_time_entries does, and then tries to figure out if an entry was deleted from Toggl by comparing latest Toggl data and records
 in Redmine database. This will take slightly more time, though should be working smart so difference is not big. If you want real synchronization run this task instead.
-You can also combine both tasks if you want. For example, you can keep on running sync_time_entries how often you prefer (say at every hour) and run sync_time_entries_remove_missing
-instead at midnight, thus the removing synchronization will happen once a day. Rake task parameters are the same with sync_time_entries
+
+There is one catch with this approach, if you have say 10 entries in Toggl, sync them to Redmine, then only add a new entry to Toggl (entry 11 becomes latest entry)
+and then delete it this rake task will not catch the deletion at first run. However, once you add another entry to Toggl, system will detect the deletion and
+remove the entry from Redmine.
+
+You can combine both tasks if you want. For example, you can keep on running sync_time_entries how often you prefer (say once every hour) and run sync_time_entries_remove_missing
+instead at midnight, thus the removing synchronization will happen once a day. Rake task parameters are the same with sync_time_entries and they are not mandatory.
 
 ```
-RAILS_ENV=production bundle exec rake toggl:sync_time_entries_remove_missing["2016-01-10 12:00","2016-01-11 12:00"]
+RAILS_ENV=production bundle exec rake toggl:sync_time_entries_remove_missing
 ```
 
 To receive list of Toggl Entries that are not associated with a Redmine issue you can run the following rake task. Args are in the format of "hours,recipients,language".
