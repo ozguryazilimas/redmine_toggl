@@ -88,6 +88,17 @@ time ranges to synchronize larger time range. To fetch entries between "2016-01-
 RAILS_ENV=production bundle exec rake toggl:sync_time_entries["2016-01-10 12:00","2016-01-11 12:00"]
 ```
 
+Currently Toggl does not provide information on deleted entries if you are fetching multiple time entries, that is why sync_time_entries task does not delete entries
+that were deleted from Toggl but that are still in Redmine. If you want to delete these entries from Redmine too you can try the sync_time_entries_remove_missing
+task, which will first do what sync_time_entries does, and then tries to figure out if an entry was deleted from Toggl by comparing latest Toggl data and records
+in Redmine database. This will take slightly more time, though should be working smart so difference is not big. If you want real synchronization run this task instead.
+You can also combine both tasks if you want. For example, you can keep on running sync_time_entries how often you prefer (say at every hour) and run sync_time_entries_remove_missing
+instead at midnight, thus the removing synchronization will happen once a day. Rake task parameters are the same with sync_time_entries
+
+```
+RAILS_ENV=production bundle exec rake toggl:sync_time_entries_remove_missing["2016-01-10 12:00","2016-01-11 12:00"]
+```
+
 To receive list of Toggl Entries that are not associated with a Redmine issue you can run the following rake task. Args are in the format of "hours,recipients,language".
 Hours option decides Toggl Entries started since how many hours ago. Recipients can be multiple email address pipe "|" separated. Language is optional, default is Redmine default.
 
