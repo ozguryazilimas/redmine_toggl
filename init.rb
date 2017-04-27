@@ -50,7 +50,7 @@ Redmine::Plugin.register :redmine_toggl do
 
   settings :partial => 'redmine_toggl/settings',
     :default => {
-      'activty' => {}
+      'activity' => {}
     }
 end
 
