@@ -102,7 +102,7 @@ class TogglEntry < ActiveRecord::Base
         :comments => description.gsub(ISSUE_MATCHER, ' ').strip
       }
 
-      related_activity = RedmineToggl.activity_for_tags(toggl_tags)
+      related_activity = RedmineToggl.activity_for_tags(toggl_tags) || TimeEntryActivity.default.try(:id)
       time_entry_attributes[:activity_id] = related_activity if related_activity.present?
 
       self.time_entry ||= build_time_entry
