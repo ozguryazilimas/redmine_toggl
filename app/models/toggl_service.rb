@@ -66,7 +66,7 @@ class TogglService
     entry.delete('duronly')
     entry['toggl_id'] = entry.delete('id')
     entry['user_id'] = @user.id
-    entry['toggl_tags'] = entry.delete('tags') if entry['tags']
+    entry['toggl_tags'] = entry.delete('tags') || []
 
     entry
   end
