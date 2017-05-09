@@ -37,7 +37,8 @@ class TogglEntriesDatatable < ServerSideDatatables
       'toggl_projects.name',
       'issues.subject',
       'duration',
-      'start'
+      'start',
+      'toggl_entries.toggl_tags'
     ]
 
     cols << 'users.firstname' unless @for_user
