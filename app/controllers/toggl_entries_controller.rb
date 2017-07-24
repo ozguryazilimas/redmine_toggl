@@ -56,8 +56,9 @@ class TogglEntriesController < ApplicationController
     @toggl_entry = toggl.create_time_entry(toggl_entry_params)
     redirect_to @toggl_entry, :notice => t('toggl.toggl_entry_created')
   rescue => e
-    Rails.logger.error e
+    Rails.logger.error "Toggl ERROR: #{e.message}\n#{e.backtrace}"
     flash.now[:error] = e.message
+    @toggl_entry = TogglEntry.new
     render :new
   end
 
@@ -72,7 +73,7 @@ class TogglEntriesController < ApplicationController
     toggl.update_time_entry(toggl_entry_params)
     redirect_to @toggl_entry, :notice => t('toggl.toggl_entry_updated')
   rescue => e
-    Rails.logger.error e
+    Rails.logger.error "Toggl ERROR: #{e.message}\n#{e.backtrace}"
     flash.now[:error] = e.message
     render :edit
   end

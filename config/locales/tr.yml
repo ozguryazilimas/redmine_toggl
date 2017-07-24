@@ -12,6 +12,7 @@ tr:
     description: Açıklama
     duration: Süre
     first: İlk
+    invalid_duration: Geçersiz Süre
     last: Son
     my_entries: Kayıtlarım
     new_toggl_entry: Yeni Toggl Kaydı

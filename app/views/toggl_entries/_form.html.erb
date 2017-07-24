@@ -28,12 +28,12 @@
 
     <p>
       <label><%= l('toggl.toggl_project') %></label>
-      <%= f.grouped_collection_select :toggl_project_id, TogglWorkspace.order(:name), :toggl_projects, :name, :id, :name %>
+      <%= f.grouped_collection_select :toggl_project_id, TogglWorkspace.order(:name), :toggl_projects, :name, :id, :name, :blank => :label_none %>
     </p>
 
     <p>
       <label><%= l('toggl.toggl_task') %></label>
-      <%= f.grouped_collection_select :toggl_task_id, TogglProject.order(:name), :toggl_tasks, :name, :id, :name %>
+      <%= f.grouped_collection_select :toggl_task_id, TogglProject.order(:name), :toggl_tasks, :name, :id, :name, :blank => :label_none %>
     </p>
 
     <p>

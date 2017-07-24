@@ -12,6 +12,7 @@ en:
     description: Description
     duration: Duration
     first: First
+    invalid_duration: Invalid Duration
     last: Last
     my_entries: My Entries
     new_toggl_entry: New Toggl Entry

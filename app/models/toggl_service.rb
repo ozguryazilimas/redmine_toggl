@@ -81,7 +81,7 @@ class TogglService
     entry = format_time_entry(raw_entry)
     return if entry['duration'].to_i < 1
 
-    toggl_entry = TogglEntry.find_or_initialize_by(:toggl_id => entry['toggl_id'])
+    toggl_entry = TogglEntry.where(:toggl_id => entry['toggl_id']).first_or_initialize
     toggl_entry.assign_attributes(entry)
     toggl_entry.user_id = @user.id
 
@@ -164,6 +164,7 @@ class TogglService
     populate_toggl_base
 
     ActiveRecord::Base.transaction do
+      fail I18n.t('toggl.invalid_duration') if time_entry_opts['duration'].to_i < 1
       entry = @toggl.create_time_entry(time_entry_opts)
       save_toggl_entry_from_toggl_data(entry)
     end
@@ -175,6 +176,7 @@ class TogglService
     populate_toggl_base
 
     ActiveRecord::Base.transaction do
+      fail I18n.t('toggl.invalid_duration') if time_entry_opts['duration'].to_i < 1
       entry = @toggl.update_time_entry(toggl_id, time_entry_opts)
       save_toggl_entry_from_toggl_data(entry)
     end
@@ -217,7 +219,7 @@ class TogglService
     toggl_service.get_toggl_workspaces
 
     toggl_service.toggl_workspaces.each do |ws|
-      t_workspace = TogglWorkspace.find_or_initialize_by(:toggl_id => ws['id'])
+      t_workspace = TogglWorkspace.where(:toggl_id => ws['id']).first_or_initialize
 
       t_workspace.assign_attributes(
         :name => ws['name'],
@@ -227,6 +229,8 @@ class TogglService
 
       t_workspace.save! if t_workspace.changed?
     end
+
+    TogglWorkspace.where.not(:toggl_id => toggl_service.toggl_workspaces.map{|k| k['id']}).destroy_all
   end
 
   def self.sync_projects(apikey)
@@ -236,7 +240,7 @@ class TogglService
     toggl_service.get_toggl_projects
 
     toggl_service.toggl_projects.each do |pr|
-      t_project = TogglProject.find_or_initialize_by(:toggl_id => pr['id'])
+      t_project = TogglProject.where(:toggl_id => pr['id']).first_or_initialize
 
       t_project.assign_attributes(
         :name => pr['name'],
@@ -249,6 +253,8 @@ class TogglService
 
       t_project.save! if t_project.changed?
     end
+
+    TogglProject.where.not(:toggl_id => toggl_service.toggl_projects.map{|k| k['id']}).destroy_all
   end
 
   def self.sync_tasks(apikey)
@@ -259,7 +265,7 @@ class TogglService
     toggl_service.get_toggl_tasks
 
     toggl_service.toggl_tasks.each do |tt|
-      t_task = TogglTask.find_or_initialize_by(:toggl_id => tt['id'])
+      t_task = TogglTask.where(:toggl_id => tt['id']).first_or_initialize
 
       t_task.assign_attributes(
         :name => tt['name'],
@@ -272,6 +278,8 @@ class TogglService
 
       t_task.save! if t_task.changed?
     end
+
+    TogglTask.where.not(:toggl_id => toggl_service.toggl_tasks.map{|k| k['id']}).destroy_all
   end
 
   def self.sync_base_data(apikey)
