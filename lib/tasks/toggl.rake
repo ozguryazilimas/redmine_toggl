@@ -90,5 +90,33 @@ namespace :toggl do
     results = TogglEntry.report_without_project(hours_ago)
     Mailer.toggl_report_without_project(recipients, results, language).deliver
   end
+
+  desc 'Sends email to all active Toggl users with a list of Toggl entries that are not assigned to an issue'
+  task :report_without_issue_to_users, [:hours_ago] => :environment do |t, args|
+    hours_ago = args[:hours_ago].to_i > 0 ? args[:hours_ago].to_i.hours.ago : nil
+
+    User.active.with_toggl_api_key.each do |user|
+      recipients = user.mail
+      language = user.language
+
+      results = TogglEntry.report_without_issue_for_user(user, hours_ago)
+      next if results.blank?
+      Mailer.toggl_report_without_issue(recipients, results, language).deliver
+    end
+  end
+
+  desc 'Sends email to all active Toggl users with a list of Toggl entries that are not assigned to a Toggl Project'
+  task :report_without_project_to_users, [:hours_ago] => :environment do |t, args|
+    hours_ago = args[:hours_ago].to_i > 0 ? args[:hours_ago].to_i.hours.ago : nil
+
+    User.active.with_toggl_api_key.each do |user|
+      recipients = user.mail
+      language = user.language
+
+      results = TogglEntry.report_without_project_for_user(user, hours_ago)
+      next if results.blank?
+      Mailer.toggl_report_without_project(recipients, results, language).deliver
+    end
+  end
 end
 

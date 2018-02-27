@@ -16,6 +16,7 @@ module RedmineToggl
       module InstanceMethods
 
         def toggl_report_without_issue(recipients, report_results, language = nil)
+          Rails.logger.info "Sending Toggl entry without issue report to #{recipients.inspect}"
           @report_data = report_results
           I18n.locale = language if language
           redmine_headers 'Report' => 'toggl_entries_without_issue'
@@ -24,6 +25,7 @@ module RedmineToggl
         end
 
         def toggl_report_without_project(recipients, report_results, language = nil)
+          Rails.logger.info "Sending Toggl entry without project report to #{recipients.inspect}"
           @report_data = report_results
           I18n.locale = language if language
           redmine_headers 'Report' => 'toggl_entries_without_project'

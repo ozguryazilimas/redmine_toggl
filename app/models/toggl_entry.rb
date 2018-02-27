@@ -33,8 +33,16 @@ class TogglEntry < ActiveRecord::Base
     missing_issue.start_after(start_after).group_by{|k| k.user.name}
   end
 
+  def self.report_without_issue_for_user(user, start_after = nil)
+    for_user(user).missing_issue.start_after(start_after).group_by{|k| k.user.name}
+  end
+
   def self.report_without_project(start_after = nil)
     missing_project.start_after(start_after).group_by{|k| k.user.name}
+  end
+
+  def self.report_without_project_for_user(user, start_after = nil)
+    for_user(user).missing_project.start_after(start_after).group_by{|k| k.user.name}
   end
 
   def toggl_project_color

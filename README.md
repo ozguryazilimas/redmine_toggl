@@ -117,6 +117,14 @@ You can also get the same report for Toggl Entries that do not have Toggl Projec
 RAILS_ENV=production bundle exec rake toggl:report_without_project[24,"bob@example.com|john@example.com","en"]
 ```
 
+Sending reports for entries without project or without issue to users is also possible, these will send different emails to all active users that have
+Toggl API key set in their profiles and that have missing project or issue. Email language will be what is configured in users profile.
+
+```
+RAILS_ENV=production bundle exec rake toggl:report_without_issue_to_users[24]
+RAILS_ENV=production bundle exec rake toggl:report_without_project_to_users[24]
+```
+
 All rake tasks must be run in the Redmine installation location.
 
 
