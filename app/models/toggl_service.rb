@@ -130,7 +130,7 @@ class TogglService
         # but if get just one by hand you can detect if it was deleted
         should_delete = entry_data['server_deleted_at'].present?
       rescue => e
-        Rails.logger.error "Trying to detect if Toggl entry with toggl_id #{entry.toggl_id} was deleted " \
+        Rails.logger.warn "Trying to detect if Toggl entry with toggl_id #{entry.toggl_id} was deleted " \
           "but instead received #{e.message}"
       end
 
