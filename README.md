@@ -70,6 +70,12 @@ RAILS_ENV=production bundle exec rake toggl:sync_base_data[zaburt]
 
 You only need to synchronize base data once. If you update projects or tasks in Toggl you can run the rake task again to update in Redmine.
 
+If you want to add user specific workspaces to the system you can run the following task. Note that if a user specific workspace is added, user created entries are always set to use that workspace.
+
+```
+RAILS_ENV=production bundle exec rake toggl:sync_base_data_for_user[zaburt,"Zaburt's Workspace"]
+```
+
 
 ## Rake Tasks
 

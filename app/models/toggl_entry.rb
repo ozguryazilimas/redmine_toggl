@@ -38,7 +38,9 @@ class TogglEntry < ActiveRecord::Base
   end
 
   def self.report_without_project(start_after = nil)
-    missing_project.start_after(start_after).group_by{|k| k.user.name}
+    includes(:user, :toggl_workspace).missing_project.start_after(start_after).
+      reject{|k| k.user.try(:toggl_workspace)}.
+      group_by{|k| k.user.name}
   end
 
   def self.report_without_project_for_user(user, start_after = nil)

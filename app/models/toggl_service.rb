@@ -196,11 +196,15 @@ class TogglService
     User.active.each do |user|
       next if user.locked?
 
-      apikey = user.toggl_api_key
+      apikey = user.cf_toggl_api_key
       next if apikey.blank?
 
-      workspace_name = user.toggl_workspace
-      workspace_id = workspaces[workspace_name]
+      if user.toggl_workspace
+        workspace_id = user.toggl_workspace.toggl_id
+      else
+        workspace_name = user.cf_toggl_workspace
+        workspace_id = workspaces[workspace_name]
+      end
 
       ts_params = {
         :user => user,
@@ -214,11 +218,13 @@ class TogglService
     end
   end
 
-  def self.sync_workspaces(apikey)
+  def self.sync_workspaces(apikey, workspace_to_sync = nil, user_to_sync = nil)
     toggl_service = TogglService.new(:apikey => apikey)
     toggl_service.get_toggl_workspaces
 
     toggl_service.toggl_workspaces.each do |ws|
+      next if workspace_to_sync.present? && ws['name'] != workspace_to_sync
+
       t_workspace = TogglWorkspace.where(:toggl_id => ws['id']).first_or_initialize
 
       t_workspace.assign_attributes(
@@ -227,10 +233,13 @@ class TogglService
         :ical_url => ws['ical_url']
       )
 
+      t_workspace.user = user_to_sync if user_to_sync
       t_workspace.save! if t_workspace.changed?
     end
 
-    TogglWorkspace.where.not(:toggl_id => toggl_service.toggl_workspaces.map{|k| k['id']}).destroy_all
+    return if user_to_sync
+    TogglWorkspace.where.not(:toggl_id => toggl_service.toggl_workspaces.map{|k| k['id']}).
+                   where(:user_id => nil).destroy_all
   end
 
   def self.sync_projects(apikey)
@@ -254,7 +263,8 @@ class TogglService
       t_project.save! if t_project.changed?
     end
 
-    TogglProject.where.not(:toggl_id => toggl_service.toggl_projects.map{|k| k['id']}).destroy_all
+    TogglProject.where.not(:toggl_id => toggl_service.toggl_projects.map{|k| k['id']}).
+                 where(:toggl_workspace => TogglWorkspace.without_user).destroy_all
   end
 
   def self.sync_tasks(apikey)
@@ -279,14 +289,18 @@ class TogglService
       t_task.save! if t_task.changed?
     end
 
-    TogglTask.where.not(:toggl_id => toggl_service.toggl_tasks.map{|k| k['id']}).destroy_all
+    TogglTask.where.not(:toggl_id => toggl_service.toggl_tasks.map{|k| k['id']}).
+              where(:toggl_workspace => TogglWorkspace.without_user).destroy_all
   end
 
-  def self.sync_base_data(apikey)
+  def self.sync_base_data(apikey, workspace_to_sync = nil, user_to_sync = nil)
     ActiveRecord::Base.transaction do
-      TogglService.sync_workspaces(apikey)
-      TogglService.sync_projects(apikey)
-      TogglService.sync_tasks(apikey)
+      TogglService.sync_workspaces(apikey, workspace_to_sync, user_to_sync)
+
+      unless user_to_sync
+        TogglService.sync_projects(apikey)
+        TogglService.sync_tasks(apikey)
+      end
     end
   end
 end

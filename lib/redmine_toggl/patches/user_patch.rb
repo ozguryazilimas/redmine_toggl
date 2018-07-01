@@ -8,6 +8,8 @@ module RedmineToggl
         base.class_eval do
           unloadable
 
+          has_one :toggl_workspace
+
           scope :with_toggl_api_key, -> {
             toggl_api_key_field_id = TogglService.custom_field_api_key.id
 
@@ -20,11 +22,11 @@ module RedmineToggl
 
       module InstanceMethods
 
-        def toggl_api_key
+        def cf_toggl_api_key
           custom_field_value(TogglService.custom_field_api_key)
         end
 
-        def toggl_workspace
+        def cf_toggl_workspace
           custom_field_value(TogglService.custom_field_workspace)
         end
 
@@ -37,7 +39,7 @@ module RedmineToggl
         end
 
         def toggl_can_create_toggl_entry
-          toggl_api_key.present?
+          cf_toggl_api_key.present?
         end
 
         def toggl_can_log_time_to_all_issues

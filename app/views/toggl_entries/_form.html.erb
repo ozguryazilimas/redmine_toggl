@@ -21,20 +21,24 @@
       <% end %>
     </p>
 
-    <p>
-      <label><%= l('toggl.toggl_workspace') %></label>
-      <%= f.collection_select :toggl_workspace_id, TogglWorkspace.order(:name), :id, :name %>
-    </p>
+    <% if User.current.toggl_workspace  %>
+      <%= f.hidden_field :toggl_workspace_id, :value => User.current.toggl_workspace.id %>
+    <% else %>
+      <p>
+        <label><%= l('toggl.toggl_workspace') %></label>
+        <%= f.collection_select :toggl_workspace_id, TogglWorkspace.order(:name), :id, :name %>
+      </p>
 
-    <p>
-      <label><%= l('toggl.toggl_project') %></label>
-      <%= f.grouped_collection_select :toggl_project_id, TogglWorkspace.order(:name), :toggl_projects, :name, :id, :name, :blank => :label_none %>
-    </p>
+      <p>
+        <label><%= l('toggl.toggl_project') %></label>
+        <%= f.grouped_collection_select :toggl_project_id, TogglWorkspace.order(:name), :toggl_projects, :name, :id, :name, :blank => :label_none %>
+      </p>
 
-    <p>
-      <label><%= l('toggl.toggl_task') %></label>
-      <%= f.grouped_collection_select :toggl_task_id, TogglProject.order(:name), :toggl_tasks, :name, :id, :name, :blank => :label_none %>
-    </p>
+      <p>
+        <label><%= l('toggl.toggl_task') %></label>
+        <%= f.grouped_collection_select :toggl_task_id, TogglProject.order(:name), :toggl_tasks, :name, :id, :name, :blank => :label_none %>
+      </p>
+    <% end %>
 
     <p>
       <label><%= l('toggl.toggl_tags') %></label>
@@ -45,5 +49,8 @@
 </div>
 
 <%= javascript_include_tag 'console_fallback', :plugin => 'redmine_toggl' %>
-<%= javascript_include_tag 'redmine_toggl_edit', :plugin => 'redmine_toggl' %>
+
+<% unless User.current.toggl_workspace %>
+  <%= javascript_include_tag 'redmine_toggl_edit', :plugin => 'redmine_toggl' %>
+<% end %>
 
