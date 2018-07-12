@@ -6,5 +6,7 @@ class TogglProject < ActiveRecord::Base
 
   belongs_to :toggl_workspace
 
+  scope :without_user, -> {where(:toggl_workspace => TogglWorkspace.without_user)}
+
 end
 

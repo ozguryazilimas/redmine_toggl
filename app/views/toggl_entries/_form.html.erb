@@ -21,22 +21,25 @@
       <% end %>
     </p>
 
-    <% if User.current.toggl_workspace  %>
-      <%= f.hidden_field :toggl_workspace_id, :value => User.current.toggl_workspace.id %>
+    <%
+        user_workspace = f.object.user.try(:toggl_workspace) || User.current.toggl_workspace
+        if user_workspace
+    %>
+      <%= f.hidden_field :toggl_workspace_id, :value => user_workspace.id %>
     <% else %>
       <p>
         <label><%= l('toggl.toggl_workspace') %></label>
-        <%= f.collection_select :toggl_workspace_id, TogglWorkspace.order(:name), :id, :name %>
+        <%= f.collection_select :toggl_workspace_id, TogglWorkspace.without_user.order(:name), :id, :name %>
       </p>
 
       <p>
         <label><%= l('toggl.toggl_project') %></label>
-        <%= f.grouped_collection_select :toggl_project_id, TogglWorkspace.order(:name), :toggl_projects, :name, :id, :name, :blank => :label_none %>
+        <%= f.grouped_collection_select :toggl_project_id, TogglWorkspace.without_user.order(:name), :toggl_projects, :name, :id, :name, :blank => :label_none %>
       </p>
 
       <p>
         <label><%= l('toggl.toggl_task') %></label>
-        <%= f.grouped_collection_select :toggl_task_id, TogglProject.order(:name), :toggl_tasks, :name, :id, :name, :blank => :label_none %>
+        <%= f.grouped_collection_select :toggl_task_id, TogglProject.without_user.order(:name), :toggl_tasks, :name, :id, :name, :blank => :label_none %>
       </p>
     <% end %>
 
