@@ -90,6 +90,10 @@ class TogglService
     toggl_entry.toggl_task_id = @tasks[entry['tid']]
 
     toggl_entry.save_if_changed
+  rescue => e
+    Rails.logger.error e.message
+    Rails.logger.error e.backtrace.join("\n")
+    raise
   end
 
   def save_toggl_time_entries
