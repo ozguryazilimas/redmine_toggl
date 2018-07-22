@@ -101,7 +101,7 @@ class TogglService
 
     @toggl_time_entries.each do |entry|
       # skip if user requested workspace and time entry workspace does not match
-      next if @filter_workspace_id && entry['wid'] != @filter_workspace_id
+      next if @filter_workspace_id.present? && entry['wid'] != @filter_workspace_id
 
       # ignore time entries that are not finished yet
       next if entry['stop'].to_s.empty?
@@ -195,7 +195,7 @@ class TogglService
   end
 
   def self.sync_toggl_time_entries(sync_args = {}, check_missing = false)
-    workspaces = TogglWorkspace.pluck(:name, :toggl_id).to_h
+    workspaces = TogglWorkspace.without_user.pluck(:name, :toggl_id).to_h
 
     User.active.each do |user|
       next if user.locked?
@@ -207,7 +207,7 @@ class TogglService
         workspace_id = user.toggl_workspace.toggl_id
       else
         workspace_name = user.cf_toggl_workspace
-        workspace_id = workspaces[workspace_name]
+        workspace_id = workspaces[workspace_name] if workspace_name.present?
       end
 
       ts_params = {
