@@ -2,7 +2,7 @@
 var current_page_datatables;
 
 var datatables_defaults = {
-  // lengthMenu: [[20, 50, 100, 250, -1], [20, 50, 100, 250, 'All']],
+  // lengthMenu: [[20, 50, 100, 250, -1], [20, 50, 100, 250, datatable_str.all]],
   lengthMenu: [[20, 50, 100, 250], [20, 50, 100, 250]],
   pageLength: 50,
   order: [[datatable_order_index, 'desc']],
