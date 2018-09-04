@@ -3,7 +3,7 @@ var current_page_datatables;
 
 var datatables_defaults = {
   // lengthMenu: [[20, 50, 100, 250, -1], [20, 50, 100, 250, datatable_str.all]],
-  lengthMenu: [[20, 50, 100, 250], [20, 50, 100, 250]],
+  lengthMenu: [[20, 50, 100, 250, 1000, 2000], [20, 50, 100, 250, 1000, 2000]],
   pageLength: 50,
   order: [[datatable_order_index, 'desc']],
   columnDefs: [
@@ -15,6 +15,10 @@ var datatables_defaults = {
       targets: 'datatable_no_search',
       searchable: false
     }
+  ],
+  dom: "Blfrtip",
+  buttons: [
+    'csv', 'print'
   ],
   language: {
     search: '',

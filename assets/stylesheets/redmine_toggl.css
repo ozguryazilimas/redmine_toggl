@@ -48,3 +48,7 @@
   color: #000;
 }
 
+.redmine_toggl_datatables_wrapper .dt-buttons {
+  margin-right: 20px;
+}
+
