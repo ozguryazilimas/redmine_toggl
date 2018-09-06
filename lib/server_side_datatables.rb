@@ -32,11 +32,13 @@ class ServerSideDatatables
   TRUE = 'true'
   DIR = 'dir'
   NEWLINE = "\n".freeze
+  LIKE_OPERATOR = (ActiveRecord::Base.connection.adapter_name =~ /PostgreSQL/i).nil? ? 'LIKE' : 'ILIKE'
 
 
   def initialize(klass, view, for_user = nil)
     @klass = klass
     @view = view
+    @for_user = for_user if for_user.present?
   end
 
   def as_json(_options = {})
@@ -95,7 +97,7 @@ class ServerSideDatatables
     criteria_search_for = search_for.inject([]) do |criteria, atom|
       current_ix += 1
       terms["search#{current_ix}".to_sym] = "%#{atom}%"
-      column_or_clause = search_columns.map{|col| "#{col} ILIKE :search#{current_ix}"}.join(OR_STR)
+      column_or_clause = search_columns.map{|col| "#{col} #{LIKE_OPERATOR} :search#{current_ix}"}.join(OR_STR)
       criteria << "(#{column_or_clause})"
     end.join(AND_STR)
 
