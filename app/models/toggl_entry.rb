@@ -1,5 +1,4 @@
 class TogglEntry < ActiveRecord::Base
-  unloadable
 
   ISSUE_MATCHER = /\s*#(\d+)\s*/
   DEFAULT_COLOR = '#000000'

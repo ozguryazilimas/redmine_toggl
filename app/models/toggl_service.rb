@@ -2,7 +2,6 @@ require 'togglv8'
 require 'json'
 
 class TogglService
-  unloadable
 
   TOGGL_API_KEY = 'Toggl API Key'
   TOGGL_WORKSPACE = 'Toggl Workspace'

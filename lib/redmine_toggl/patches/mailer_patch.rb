@@ -8,7 +8,6 @@ module RedmineToggl
         base.send(:include, InstanceMethods)
 
         base.class_eval do
-          unloadable  # to make sure plugin is loaded in development mode
           helper :toggl_entries
         end
       end

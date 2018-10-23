@@ -6,7 +6,6 @@ module RedmineToggl
       def self.included(base)
         base.send(:include, InstanceMethods)
         base.class_eval do
-          unloadable
 
           has_one :toggl_workspace
 

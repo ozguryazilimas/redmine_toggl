@@ -1,5 +1,4 @@
 class TogglTask < ActiveRecord::Base
-  unloadable
 
   has_many :toggl_entries
 

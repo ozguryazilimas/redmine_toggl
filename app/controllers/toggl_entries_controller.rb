@@ -1,6 +1,5 @@
 
 class TogglEntriesController < ApplicationController
-  unloadable
 
   before_filter :set_toggl_entry, :only => [:show, :edit, :update, :destroy]
   before_filter :authorize_global
