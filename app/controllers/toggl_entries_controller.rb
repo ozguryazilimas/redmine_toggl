@@ -1,12 +1,12 @@
 
 class TogglEntriesController < ApplicationController
 
-  before_filter :set_toggl_entry, :only => [:show, :edit, :update, :destroy]
-  before_filter :authorize_global
-  before_filter :user_can_create_toggl_entry, :only => [:new, :create]
-  before_filter :user_can_view_others_entries, :only => [:all_entries, :filter_by_user]
-  before_filter :set_user, :only => [:index, :all_entries, :filter_by_user]
-  before_filter :parse_toggl_tags, :only => [:create, :update]
+  before_action :set_toggl_entry, :only => [:show, :edit, :update, :destroy]
+  before_action :authorize_global
+  before_action :user_can_create_toggl_entry, :only => [:new, :create]
+  before_action :user_can_view_others_entries, :only => [:all_entries, :filter_by_user]
+  before_action :set_user, :only => [:index, :all_entries, :filter_by_user]
+  before_action :parse_toggl_tags, :only => [:create, :update]
 
   helper_method :user_can_create_toggl_entry, :user_can_edit_toggl_entry, :user_can_edit_all_toggl_entries,
     :user_can_view_others_entries
