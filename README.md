@@ -110,17 +110,18 @@ instead at midnight, thus the removing synchronization will happen once a day. R
 RAILS_ENV=production bundle exec rake toggl:sync_time_entries_remove_missing
 ```
 
-To receive list of Toggl Entries that are not associated with a Redmine issue you can run the following rake task. Args are in the format of "hours,recipients,language".
-Hours option decides Toggl Entries started since how many hours ago. Recipients can be multiple email address pipe "|" separated. Language is optional, default is Redmine default.
+To receive list of Toggl Entries that are not associated with a Redmine issue you can run the following rake task. Args are in the format of "started_after,stopped_before,recipients,language".
+Started after option decides Toggl Entries started since how many hours ago, stopped before option detects entries stopped before given hours. Started after or stopped before options can be
+given zero or blank ("") value to indicate "any". Recipients can be multiple email address pipe "|" separated. Language is optional, default is Redmine default.
 
 ```
-RAILS_ENV=production bundle exec rake toggl:report_without_issue[24,"bob@example.com|john@example.com","en"]
+RAILS_ENV=production bundle exec rake toggl:report_without_issue[24,0,"bob@example.com|john@example.com","en"]
 ```
 
 You can also get the same report for Toggl Entries that do not have Toggl Project selected
 
 ```
-RAILS_ENV=production bundle exec rake toggl:report_without_project[24,"bob@example.com|john@example.com","en"]
+RAILS_ENV=production bundle exec rake toggl:report_without_project[24,0,"bob@example.com|john@example.com","en"]
 ```
 
 Sending reports for entries without project or without issue to users is also possible, these will send different emails to all active users that have
@@ -128,7 +129,7 @@ Toggl API key set in their profiles and that have missing project or issue. Emai
 
 ```
 RAILS_ENV=production bundle exec rake toggl:report_without_issue_to_users[24]
-RAILS_ENV=production bundle exec rake toggl:report_without_project_to_users[24]
+RAILS_ENV=production bundle exec rake toggl:report_without_project_to_users[24,1]
 ```
 
 All rake tasks must be run in the Redmine installation location.

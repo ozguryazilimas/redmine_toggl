@@ -21,29 +21,30 @@ class TogglEntry < ActiveRecord::Base
   scope :for_issue, -> (issue) {where(:issue_id => issue)}
   scope :order_by_start, -> {order(:start)}
   scope :order_by_user, -> {joins(:user).order('users.firstname, users.lastname')}
-  scope :start_after, -> (timeval) {where('start > ?', timeval) if timeval}
+  scope :started_after, -> (timeval) {where('start > ?', timeval) if timeval}
+  scope :stopped_before, -> (timeval) {where('stop <= ?', timeval) if timeval}
   scope :missing_issue, -> {without_issue.order_by_start.order_by_user}
   scope :missing_project, -> {without_project.order_by_start.order_by_user}
 
   validates_presence_of :user_id, :toggl_id
 
 
-  def self.report_without_issue(start_after = nil)
-    missing_issue.start_after(start_after).group_by{|k| k.user.name}
+  def self.report_without_issue(started_after = nil, stopped_before = nil)
+    missing_issue.started_after(started_after).stopped_before(stopped_before).group_by{|k| k.user.name}
   end
 
-  def self.report_without_issue_for_user(user, start_after = nil)
-    for_user(user).missing_issue.start_after(start_after).group_by{|k| k.user.name}
+  def self.report_without_issue_for_user(user, started_after = nil, stopped_before = nil)
+    for_user(user).missing_issue.started_after(started_after).stopped_before(stopped_before).group_by{|k| k.user.name}
   end
 
-  def self.report_without_project(start_after = nil)
-    includes(:user, :toggl_workspace).missing_project.start_after(start_after).
+  def self.report_without_project(started_after = nil, stopped_before = nil)
+    includes(:user, :toggl_workspace).missing_project.started_after(started_after).stopped_before(stopped_before).
       reject{|k| k.user.try(:toggl_workspace)}.
       group_by{|k| k.user.name}
   end
 
-  def self.report_without_project_for_user(user, start_after = nil)
-    for_user(user).missing_project.start_after(start_after).group_by{|k| k.user.name}
+  def self.report_without_project_for_user(user, started_after = nil, stopped_before = nil)
+    for_user(user).missing_project.started_after(started_after).stopped_before(stopped_before).group_by{|k| k.user.name}
   end
 
   def toggl_project_color

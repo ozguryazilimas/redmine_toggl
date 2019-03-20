@@ -78,8 +78,9 @@ namespace :toggl do
   end
 
   desc 'Sends email with a list of Toggl entries that are not assigned to an issue'
-  task :report_without_issue, [:hours_ago, :recipients, :language] => :environment do |t, args|
-    hours_ago = args[:hours_ago].to_i > 0 ? args[:hours_ago].to_i.hours.ago : nil
+  task :report_without_issue, [:started_after, :stopped_before, :recipients, :language] => :environment do |t, args|
+    started_after = arg_to_hours_ago(args[:started_after])
+    stopped_before = arg_to_hours_ago(args[:stopped_before])
     recipients = args[:recipients].to_s.split('|')
     language = args[:language]
 
@@ -95,13 +96,14 @@ namespace :toggl do
       end
     end
 
-    results = TogglEntry.report_without_issue(hours_ago)
+    results = TogglEntry.report_without_issue(started_after, stopped_before)
     Mailer.toggl_report_without_issue(recipients, results, language).deliver
   end
 
   desc 'Sends email with a list of Toggl entries that are not assigned to a Toggl Project'
-  task :report_without_project, [:hours_ago, :recipients, :language] => :environment do |t, args|
-    hours_ago = args[:hours_ago].to_i > 0 ? args[:hours_ago].to_i.hours.ago : nil
+  task :report_without_project, [:started_after, :stopped_before, :recipients, :language] => :environment do |t, args|
+    started_after = arg_to_hours_ago(args[:started_after])
+    stopped_before = arg_to_hours_ago(args[:stopped_before])
     recipients = args[:recipients].to_s.split('|')
     language = args[:language]
 
@@ -117,27 +119,29 @@ namespace :toggl do
       end
     end
 
-    results = TogglEntry.report_without_project(hours_ago)
+    results = TogglEntry.report_without_project(started_after, stopped_before)
     Mailer.toggl_report_without_project(recipients, results, language).deliver
   end
 
   desc 'Sends email to all active Toggl users with a list of Toggl entries that are not assigned to an issue'
-  task :report_without_issue_to_users, [:hours_ago] => :environment do |t, args|
-    hours_ago = args[:hours_ago].to_i > 0 ? args[:hours_ago].to_i.hours.ago : nil
+  task :report_without_issue_to_users, [:started_after, :stopped_before] => :environment do |t, args|
+    started_after = arg_to_hours_ago(args[:started_after])
+    stopped_before = arg_to_hours_ago(args[:stopped_before])
 
     User.active.with_toggl_api_key.each do |user|
       recipients = user.mail
       language = user.language
 
-      results = TogglEntry.report_without_issue_for_user(user, hours_ago)
+      results = TogglEntry.report_without_issue_for_user(user, started_after, stopped_before)
       next if results.blank?
       Mailer.toggl_report_without_issue(recipients, results, language).deliver
     end
   end
 
   desc 'Sends email to all active Toggl users with a list of Toggl entries that are not assigned to a Toggl Project'
-  task :report_without_project_to_users, [:hours_ago] => :environment do |t, args|
-    hours_ago = args[:hours_ago].to_i > 0 ? args[:hours_ago].to_i.hours.ago : nil
+  task :report_without_project_to_users, [:started_after, :stopped_before] => :environment do |t, args|
+    started_after = arg_to_hours_ago(args[:started_after])
+    stopped_before = arg_to_hours_ago(args[:stopped_before])
 
     User.active.with_toggl_api_key.each do |user|
       next if user.toggl_workspace
@@ -145,10 +149,16 @@ namespace :toggl do
       recipients = user.mail
       language = user.language
 
-      results = TogglEntry.report_without_project_for_user(user, hours_ago)
+      results = TogglEntry.report_without_project_for_user(user, started_after, stopped_before)
       next if results.blank?
       Mailer.toggl_report_without_project(recipients, results, language).deliver
     end
+  end
+
+  def arg_to_hours_ago(timeval)
+    time_in_int = timeval.to_i
+    return nil unless time_in_int > 0
+    time_in_int.hours.ago
   end
 end
 
