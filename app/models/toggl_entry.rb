@@ -1,9 +1,11 @@
 class TogglEntry < ActiveRecord::Base
 
   ISSUE_MATCHER = /\s*#(\d+)\s*/
-  DEFAULT_COLOR = '#000000'
+  DEFAULT_COLOR = '#000000'.freeze
   EMAIL_VALIDATOR = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-  TOGGL_TAG_SEPARATOR = ','
+  TOGGL_TAG_SEPARATOR = ','.freeze
+  TOGGL_MULTI_TAG_SEPARATOR = '|'.freeze
+
 
   serialize :toggl_tags, Array
 

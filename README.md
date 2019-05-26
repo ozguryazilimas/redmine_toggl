@@ -33,6 +33,16 @@ Ex: if an entry used to be related to issue 54321, but the description has chang
 Redmine time entry that used to be related to the Toggl entry is deleted (and vice versa). Other changes (description, duration etc.)
 are also synchronized.
 
+Time entry activity can be decided by the tags defined in Toggl. On the plugin settings page you can define which tags refer to which activity.
+If you want to match any one of tags separate them with a ",", if you want all the tags exist then separate them with "|". For example
+the entry "A,B|C,D" will match time entries that has
+
+  * one of the tags is A
+  * one of the tags is D
+  * has both B and C tags
+
+so this configuration will not set activity if time entry has ony tag "B".
+
 
 ## Installation
 
