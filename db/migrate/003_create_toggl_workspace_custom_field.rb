@@ -1,4 +1,4 @@
-class CreateTogglWorkspaceCustomField < ActiveRecord::Migration
+class CreateTogglWorkspaceCustomField < ActiveRecord::Migration[4.2]
 
   TOGGL_WORKSPACE = 'Toggl Workspace'
 

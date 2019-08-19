@@ -1,4 +1,4 @@
-class CreateTogglProjects < ActiveRecord::Migration
+class CreateTogglProjects < ActiveRecord::Migration[4.2]
 
   def change
     create_table :toggl_projects do |t|

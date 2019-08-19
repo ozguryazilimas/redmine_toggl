@@ -1,4 +1,4 @@
-class CreateTogglWorkspaces < ActiveRecord::Migration
+class CreateTogglWorkspaces < ActiveRecord::Migration[4.2]
 
   def change
     create_table :toggl_workspaces do |t|

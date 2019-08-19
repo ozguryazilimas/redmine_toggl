@@ -1,4 +1,4 @@
-class CreateTogglEntries < ActiveRecord::Migration
+class CreateTogglEntries < ActiveRecord::Migration[4.2]
 
   def change
     create_table :toggl_entries do |t|

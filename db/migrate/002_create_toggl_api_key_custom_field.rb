@@ -1,4 +1,4 @@
-class CreateTogglApiKeyCustomField < ActiveRecord::Migration
+class CreateTogglApiKeyCustomField < ActiveRecord::Migration[4.2]
 
   TOGGL_API_KEY = 'Toggl API Key'
 
