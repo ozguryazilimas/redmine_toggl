@@ -53,7 +53,12 @@ class TogglEntriesController < ApplicationController
   def create
     toggl = TogglService.new(:user => User.current)
     @toggl_entry = toggl.create_time_entry(toggl_entry_params)
-    redirect_to @toggl_entry, :notice => t('toggl.toggl_entry_created')
+
+    if params[:continue]
+      redirect_to new_toggl_entry_path, :notice => t('toggl.toggl_entry_created')
+    else
+      redirect_to @toggl_entry, :notice => t('toggl.toggl_entry_created')
+    end
   rescue => e
     Rails.logger.error "Toggl ERROR: #{e.message}\n#{e.backtrace}"
     flash.now[:error] = e.message
