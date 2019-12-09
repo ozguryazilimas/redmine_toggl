@@ -97,7 +97,7 @@ namespace :toggl do
     end
 
     results = TogglEntry.report_without_issue(started_after, stopped_before)
-    Mailer.toggl_report_without_issue(User.anonymous, recipients, results, language).deliver
+    Mailer.toggl_report_without_issue(User.anonymous, recipients, results, language).deliver_later
   end
 
   desc 'Sends email with a list of Toggl entries that are not assigned to a Toggl Project'
@@ -120,7 +120,7 @@ namespace :toggl do
     end
 
     results = TogglEntry.report_without_project(started_after, stopped_before)
-    Mailer.toggl_report_without_project(User.anonymous, recipients, results, language).deliver
+    Mailer.toggl_report_without_project(User.anonymous, recipients, results, language).deliver_later
   end
 
   desc 'Sends email to all active Toggl users with a list of Toggl entries that are not assigned to an issue'
@@ -134,7 +134,7 @@ namespace :toggl do
 
       results = TogglEntry.report_without_issue_for_user(user, started_after, stopped_before)
       next if results.blank?
-      Mailer.toggl_report_without_issue(user, recipients, results, language).deliver
+      Mailer.toggl_report_without_issue(user, recipients, results, language).deliver_later
     end
   end
 
@@ -151,7 +151,7 @@ namespace :toggl do
 
       results = TogglEntry.report_without_project_for_user(user, started_after, stopped_before)
       next if results.blank?
-      Mailer.toggl_report_without_project(user, recipients, results, language).deliver
+      Mailer.toggl_report_without_project(user, recipients, results, language).deliver_later
     end
   end
 
