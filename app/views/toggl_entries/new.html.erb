@@ -1,4 +1,4 @@
-<h2><%= l('toggl.toggl_entry') %></h2>
+<%= title l('toggl.toggl_entry') %>
 
 <%= labelled_form_for @toggl_entry, :url => toggl_entries_path do |f| %>
   <%= render :partial => 'form', :locals => {:f => f} %>

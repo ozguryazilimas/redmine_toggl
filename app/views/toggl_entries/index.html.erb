@@ -8,7 +8,7 @@
   <% end %>
 </div>
 
-<h2><%= t('toggl.toggl_entries') %> - <%= l('toggl.my_entries') %></h2>
+<%= title "#{t('toggl.toggl_entries')} - #{l('toggl.my_entries')}" %>
 
 <%= render :partial => 'toggl_entries', :locals => {:data_source => toggl_entries_path, :for_user => true} %>
 

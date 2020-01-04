@@ -11,6 +11,7 @@
 </div>
 
 <h2><%= t('toggl.toggl_entries') %> - <%= link_to_user(@filter_user) %></h2>
+<% html_title "#{t('toggl.toggl_entries')} - #{@filter_user.name}" %>
 
 <%= render :partial => 'toggl_entries', :locals => {:data_source => filter_by_user_toggl_entries_path(:filter_user_id => @filter_user.id), :for_user => true} %>
 

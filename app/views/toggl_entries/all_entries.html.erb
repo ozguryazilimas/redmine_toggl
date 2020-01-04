@@ -6,7 +6,7 @@
   <%= link_to l('toggl.my_entries'), toggl_entries_path, :class => 'icon icon-user' %>
 </div>
 
-<h2><%= t('toggl.toggl_entries') %> - <%= l('toggl.all_entries') %></h2>
+<%= title "#{t('toggl.toggl_entries')} - #{l('toggl.all_entries')}" %>
 
 <%= render :partial => 'toggl_entries', :locals => {:data_source => all_entries_toggl_entries_path, :for_user => false} %>
 
