@@ -144,6 +144,14 @@ RAILS_ENV=production bundle exec rake toggl:report_without_issue_to_users[24]
 RAILS_ENV=production bundle exec rake toggl:report_without_project_to_users[24,1]
 ```
 
+
+Export all entries to `redmine_toggl.csv`, accepts start and / or end time arguments too
+
+```
+RAILS_ENV=production bundle exec rake toggl:export_to_csv
+RAILS_ENV=production bundle exec rake toggl:export_to_csv["2020-01-10 12:00","2020-01-11 12:00"]
+```
+
 All rake tasks must be run in the Redmine installation location.
 
 
@@ -176,6 +184,6 @@ Manage what users can do with Redmine permissions.
 
 ## License
 
-Copyright (c) 2016 - 2018 Onur Küçük. Licensed under [GNU GPLv2](LICENSE)
+Copyright (c) 2016 - 2020 Onur Küçük. Licensed under [GNU GPLv2](LICENSE)
 
 

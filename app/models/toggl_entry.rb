@@ -49,6 +49,39 @@ class TogglEntry < ActiveRecord::Base
     for_user(user).missing_project.started_after(started_after).stopped_before(stopped_before).group_by{|k| k.user.name}
   end
 
+  def self.export_to_csv(args)
+    start_date = args[:start_date]
+    end_date = args[:end_date]
+    data = eager_load(:toggl_project, :issue).includes(:toggl_task, :user).
+      started_after(start_date).stopped_before(end_date).order_by_start
+
+    raw_csv = CSV.generate :force_quotes => true do |csv|
+      data.each do |toggl_entry|
+        csv << [
+          toggl_entry.description,
+          toggl_entry.toggl_project_name,
+          toggl_entry.formatted_issue,
+          toggl_entry.formatted_duration,
+          format_time(toggl_entry.start),
+          toggl_entry.toggl_tags.join(','),
+          toggl_entry.user.try(:name)
+        ]
+      end
+    end
+
+    raw_csv
+  end
+
+  def formatted_duration
+    Time.at(duration || 0).utc.strftime('%H:%M:%S')
+  end
+
+  def formatted_issue
+    return nil unless issue
+
+    "#{issue.tracker} ##{issue.id} #{issue.subject}"
+  end
+
   def toggl_project_color
     toggl_project.try(:hex_color) || DEFAULT_COLOR
   end

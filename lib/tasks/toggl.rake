@@ -155,6 +155,19 @@ namespace :toggl do
     end
   end
 
+  desc 'Export all Toggl entries to redmine_toggl.csv file'
+  task :export_to_csv, [:start_date, :end_date] => :environment do |t, args|
+    export_args = {}
+    export_args[:start_date] = args[:start_date] if args[:start_date].present?
+    export_args[:end_date] = args[:end_date] if args[:end_date].present?
+
+    csv_data = TogglEntry.export_to_csv(export_args)
+
+    File.open 'redmine_toggl.csv', 'w' do |f|
+      f.write csv_data
+    end
+  end
+
   def arg_to_hours_ago(timeval)
     time_in_int = timeval.to_i
     return nil unless time_in_int > 0
