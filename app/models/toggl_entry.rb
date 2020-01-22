@@ -79,7 +79,7 @@ class TogglEntry < ActiveRecord::Base
   def formatted_issue
     return nil unless issue
 
-    "#{issue.tracker} ##{issue.id} #{issue.subject}"
+    "#{issue.tracker} ##{issue.id}: #{issue.subject}"
   end
 
   def toggl_project_color
