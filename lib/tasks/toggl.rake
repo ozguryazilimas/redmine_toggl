@@ -156,14 +156,15 @@ namespace :toggl do
   end
 
   desc 'Export all Toggl entries to redmine_toggl.csv file'
-  task :export_to_csv, [:start_date, :end_date] => :environment do |t, args|
+  task :export_to_csv, [:file_name, :start_date, :end_date] => :environment do |t, args|
     export_args = {}
     export_args[:start_date] = args[:start_date] if args[:start_date].present?
     export_args[:end_date] = args[:end_date] if args[:end_date].present?
+    file_name = args[:file_name].presence || 'redmine_toggl.csv'
 
     csv_data = TogglEntry.export_to_csv(export_args)
 
-    File.open 'redmine_toggl.csv', 'w' do |f|
+    File.open file_name, 'w' do |f|
       f.write csv_data
     end
   end

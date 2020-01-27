@@ -145,11 +145,11 @@ RAILS_ENV=production bundle exec rake toggl:report_without_project_to_users[24,1
 ```
 
 
-Export all entries to `redmine_toggl.csv`, accepts start and / or end time arguments too
+Export all entries to a file (`redmine_toggl.csv` by default), accepts start and / or end time arguments too
 
 ```
 RAILS_ENV=production bundle exec rake toggl:export_to_csv
-RAILS_ENV=production bundle exec rake toggl:export_to_csv["2020-01-10 12:00","2020-01-11 12:00"]
+RAILS_ENV=production bundle exec rake toggl:export_to_csv["redmine_toggl.csv","2020-01-10 12:00","2020-01-11 12:00"]
 ```
 
 All rake tasks must be run in the Redmine installation location.
