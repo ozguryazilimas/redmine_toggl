@@ -7,7 +7,7 @@ class TogglService
   TOGGL_WORKSPACE = 'Toggl Workspace'
 
   attr_accessor :toggl, :apikey, :user, :toggl_time_entries, :toggl_workspaces, :toggl_projects, :toggl_tasks,
-                :custom_field_api_key, :custom_field_workspace
+                :custom_field_api_key, :custom_field_workspace, :errors
 
   def initialize(cfg = {})
     @config = cfg
@@ -22,6 +22,7 @@ class TogglService
     @apikey = cfg[:apikey]
     @apiparams = cfg[:apiparams]
     @filter_workspace_id = cfg[:toggl_workspace_id]
+    @errors = []
 
     setup_initial_values
   end
@@ -89,10 +90,15 @@ class TogglService
     toggl_entry.toggl_task_id = @tasks[entry['tid']]
 
     toggl_entry.save_if_changed
+    {:toggl_entry => toggl_entry}
   rescue => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace.join("\n")
-    raise
+
+    {
+      :error => e.message,
+      :toggl_entry => raw_entry
+    }
   end
 
   def save_toggl_time_entries
@@ -105,7 +111,9 @@ class TogglService
       # ignore time entries that are not finished yet
       next if entry['stop'].to_s.empty?
 
-      save_toggl_entry_from_toggl_data(entry)
+      resp = save_toggl_entry_from_toggl_data(entry)
+
+      @errors << resp if resp[:error].present?
     end
   end
 
@@ -169,7 +177,8 @@ class TogglService
     ActiveRecord::Base.transaction do
       fail I18n.t('toggl.invalid_duration') if time_entry_opts['duration'].to_i < 1
       entry = @toggl.create_time_entry(time_entry_opts)
-      save_toggl_entry_from_toggl_data(entry)
+      resp = save_toggl_entry_from_toggl_data(entry)
+      raise resp[:error] if resp[:error].present?
     end
   end
 
@@ -181,7 +190,8 @@ class TogglService
     ActiveRecord::Base.transaction do
       fail I18n.t('toggl.invalid_duration') if time_entry_opts['duration'].to_i < 1
       entry = @toggl.update_time_entry(toggl_id, time_entry_opts)
-      save_toggl_entry_from_toggl_data(entry)
+      resp = save_toggl_entry_from_toggl_data(entry)
+      raise resp[:error] if resp[:error].present?
     end
   end
 
@@ -195,6 +205,7 @@ class TogglService
 
   def self.sync_toggl_time_entries(sync_args = {}, check_missing = false)
     workspaces = TogglWorkspace.without_user.pluck(:name, :toggl_id).to_h
+    resp = {:errors => {}}
 
     User.active.each do |user|
       next if user.locked?
@@ -217,8 +228,13 @@ class TogglService
       }
 
       ts_params[:apiparams] = sync_args if sync_args.present?
-      TogglService.new(ts_params).sync_time_entries
+      ts = TogglService.new(ts_params)
+      ts.sync_time_entries
+
+      resp[:errors][user.login] = ts.errors if ts.errors.present?
     end
+
+    resp
   end
 
   def self.sync_workspaces(apikey, workspace_to_sync = nil, user_to_sync = nil)

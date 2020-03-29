@@ -6,7 +6,8 @@ namespace :toggl do
     sync_args[:start_date] = args[:start_date] if args[:start_date].present?
     sync_args[:end_date] = args[:end_date] if args[:end_date].present?
 
-    TogglService.sync_toggl_time_entries(sync_args)
+    ts_response = TogglService.sync_toggl_time_entries(sync_args)
+    format_toggl_service_errors(ts_response)
   end
 
   desc 'Sync user time entries and remove entries still in Redmine but deleted from Toggl'
@@ -15,7 +16,8 @@ namespace :toggl do
     sync_args[:start_date] = args[:start_date] if args[:start_date].present?
     sync_args[:end_date] = args[:end_date] if args[:end_date].present?
 
-    TogglService.sync_toggl_time_entries(sync_args, true)
+    ts_response = TogglService.sync_toggl_time_entries(sync_args, true)
+    format_toggl_service_errors(ts_response)
   end
 
   desc 'Sync workspace, project and task base data, delete workspaces without users'
@@ -173,6 +175,23 @@ namespace :toggl do
     time_in_int = timeval.to_i
     return nil unless time_in_int > 0
     time_in_int.hours.ago
+  end
+
+  def format_toggl_service_errors(ts_response)
+    return if ts_response.blank? || ts_response[:errors].blank?
+
+    ts_response[:errors].each do |login, errors|
+      errors.each do |error|
+        formatted = format(
+          'ERROR FOR USER: %s MESSAGE: %s TOGGL_ENTRY: %s',
+          login,
+          error[:error],
+          error[:toggl_entry]
+        )
+
+        STDERR.puts formatted
+      end
+    end
   end
 end
 
