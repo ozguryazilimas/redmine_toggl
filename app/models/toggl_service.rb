@@ -173,6 +173,7 @@ class TogglService
   def create_time_entry(opts)
     time_entry_opts = parse_api_opts(opts)
     populate_toggl_base
+    entry = nil
 
     ActiveRecord::Base.transaction do
       fail I18n.t('toggl.invalid_duration') if time_entry_opts['duration'].to_i < 1
@@ -180,6 +181,8 @@ class TogglService
       resp = save_toggl_entry_from_toggl_data(entry)
       raise resp[:error] if resp[:error].present?
     end
+
+    entry
   end
 
   def update_time_entry(opts)
