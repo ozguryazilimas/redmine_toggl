@@ -44,5 +44,13 @@ module TogglEntriesHelper
     "<span title='#{toggl_entry.toggl_task_name}' #{style}>#{toggl_entry.toggl_project_name}</span>"
   end
 
+  def rt_user_timezone_with_fallback
+    tz = User.current.time_zone
+    return tz if tz.present?
+
+    ActiveSupport::TimeZone[Time.now.zone.to_i]
+  rescue
+    'UTC'
+  end
 end
 

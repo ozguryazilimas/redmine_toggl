@@ -7,19 +7,17 @@
       <%= f.text_field :description, :size => 80, :label => '' %>
     </p>
 
-    <p>
-      <label><%= l('toggl.start') %></label>
-      <% Time.use_zone(User.current.time_zone || 'UTC') do %>
+    <% Time.use_zone(rt_user_timezone_with_fallback)  do %>
+      <p>
+        <label><%= l('toggl.start') %></label>
         <%= f.datetime_select :start %>
-      <% end %>
-    </p>
+      </p>
 
-    <p>
-      <label><%= l('toggl.stop') %></label>
-      <% Time.use_zone(User.current.time_zone || 'UTC') do %>
+      <p>
+        <label><%= l('toggl.stop') %></label>
         <%= f.datetime_select :stop %>
-      <% end %>
-    </p>
+      </p>
+    <% end %>
 
     <%
         user_workspace = f.object.user.try(:toggl_workspace) || User.current.toggl_workspace
