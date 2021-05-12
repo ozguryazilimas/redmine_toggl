@@ -5,9 +5,10 @@ class TogglService
 
   TOGGL_API_KEY = 'Toggl API Key'
   TOGGL_WORKSPACE = 'Toggl Workspace'
+  TOGGL_API_BASE_URL = 'https://api.track.toggl.com/api/v8/'
 
-  attr_accessor :toggl, :apikey, :user, :toggl_time_entries, :toggl_workspaces, :toggl_projects, :toggl_tasks,
-                :custom_field_api_key, :custom_field_workspace, :errors
+  attr_accessor :toggl, :toggl_conn, :apikey, :user, :toggl_time_entries, :toggl_workspaces, :toggl_projects,
+                :toggl_tasks, :custom_field_api_key, :custom_field_workspace, :errors
 
   def initialize(cfg = {})
     @config = cfg
@@ -32,7 +33,11 @@ class TogglService
       @apikey = @user.custom_field_value(TogglService.custom_field_api_key)
     end
 
-    @toggl = TogglV8::API.new(@apikey) if @apikey.present?
+    return nil if @apikey.blank?
+
+    @toggl = TogglV8::API.new(@apikey)
+    @toggl_conn = TogglV8::Connection.open(@apikey, TogglV8::Connection::API_TOKEN, TOGGL_API_BASE_URL, {})
+    @toggl.instance_variable_set '@conn', @toggl_conn
   end
 
   def get_toggl_time_entries
