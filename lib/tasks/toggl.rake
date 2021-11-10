@@ -191,6 +191,11 @@ namespace :toggl do
 
         STDERR.puts formatted
       end
+
+      user = User.find_by_login(login)
+      next unless user
+
+      Mailer.toggl_report_invalid_user_toggl_entry(user, errors, user.language).deliver_now
     end
   end
 end

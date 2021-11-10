@@ -34,6 +34,16 @@ module RedmineToggl
           mail :to => recipients, :subject => subject
         end
 
+        def toggl_report_invalid_user_toggl_entry(user, errors, language = nil)
+          Rails.logger.info "Sending Toggl invalid user entry error to #{user.inspect}"
+          @errors = errors
+          I18n.locale = language.presence || user.language.presence
+          recipients = user.email_address.address
+          redmine_headers 'Report' => 'toggl_invalid_user_toggl_entry'
+
+          subject = t('toggl.toggl_invalid_user_toggl_entry_subject')
+          mail :to => recipients, :subject => subject
+        end
 
         def toggl_add_time_to_subject(subject_base, started_after = nil, stopped_before = nil)
           return subject_base if started_after.blank? && stopped_before.blank?

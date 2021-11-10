@@ -24,6 +24,8 @@ en:
     toggl_entry_created: Toggl entry created
     toggl_entry_deleted: Toggl entry deleted
     toggl_entry_updated: Toggl entry updated
+    toggl_invalid_user_toggl_entry_info: Invalid Toggl Entry detected, make sure issue number is correct
+    toggl_invalid_user_toggl_entry_subject: Invalid Toggl Entry Detected
     toggl_project: Project
     toggl_tags: Tags
     toggl_task: Task

@@ -1,0 +1,18 @@
+
+<p>
+<%= t('toggl.toggl_invalid_user_toggl_entry_info') %>
+</p>
+<hr>
+
+<% @errors.each do |entry| %>
+
+  <p>
+    <%= entry[:toggl_entry]['description'] %>
+  </p>
+  <hr>
+
+  <br>
+  <br>
+
+<% end %>
+

@@ -24,6 +24,8 @@ tr:
     toggl_entry_created: Toggl kaydı oluşturuldu
     toggl_entry_deleted: Toggl kaydı silindi
     toggl_entry_updated: Toggl kaydı güncellendi
+    toggl_invalid_user_toggl_entry_info: Geçersiz Toggl bulundu, iş numarasının doğru olduğundan emin olunuz.
+    toggl_invalid_user_toggl_entry_subject: Geçersiz Toggl Kaydı
     toggl_project: Proje
     toggl_tags: Etiketler
     toggl_task: Görev
