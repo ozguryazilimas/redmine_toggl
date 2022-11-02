@@ -7,7 +7,7 @@ class TogglEntry < ActiveRecord::Base
   TOGGL_MULTI_TAG_SEPARATOR = '|'.freeze
 
 
-  serialize :toggl_tags, Array
+  serialize :toggl_tags, JSON
 
   belongs_to :user
   belongs_to :issue
@@ -63,13 +63,19 @@ class TogglEntry < ActiveRecord::Base
           toggl_entry.formatted_issue,
           toggl_entry.formatted_duration,
           format_time(toggl_entry.start),
-          toggl_entry.toggl_tags.join(','),
+          toggl_entry.clean_toggl_tags.join(','),
           toggl_entry.user.try(:name)
         ]
       end
     end
 
     raw_csv
+  end
+
+  def clean_toggl_tags
+    return [] if toggl_tags.blank?
+
+    toggl_tags
   end
 
   def formatted_duration
@@ -110,7 +116,7 @@ class TogglEntry < ActiveRecord::Base
     opts['wid'] = toggl_workspace.try(:toggl_id)
     opts['pid'] = toggl_project.try(:toggl_id)
     opts['tid'] = toggl_task.try(:toggl_id)
-    opts['tags'] = toggl_tags || []
+    opts['tags'] = clean_toggl_tags
 
     opts
   end
@@ -147,7 +153,7 @@ class TogglEntry < ActiveRecord::Base
         :comments => description.gsub(ISSUE_MATCHER, ' ').strip
       }
 
-      related_activity = RedmineToggl.activity_for_tags(toggl_tags) || TimeEntryActivity.default.try(:id)
+      related_activity = RedmineToggl.activity_for_tags(clean_toggl_tags) || TimeEntryActivity.default.try(:id)
       time_entry_attributes[:activity_id] = related_activity if related_activity.present?
 
       self.time_entry ||= build_time_entry

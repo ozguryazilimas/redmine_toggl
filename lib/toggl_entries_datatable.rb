@@ -23,7 +23,7 @@ class TogglEntriesDatatable < ServerSideDatatables
         rt_issue_link(toggl_entry.issue),
         rt_format_duration(toggl_entry.duration),
         format_time(toggl_entry.start),
-        toggl_entry.toggl_tags.join(',')
+        toggl_entry.clean_toggl_tags.join(',')
       ]
 
       cols << rt_user_link(toggl_entry.user) unless @for_user
