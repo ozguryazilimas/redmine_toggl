@@ -1,5 +1,5 @@
 require 'redmine'
-require 'redmine_toggl'
+require_dependency File.join(File.dirname(__FILE__), 'lib/redmine_toggl')
 
 Redmine::Plugin.register :redmine_toggl do
   name 'Redmine Toggl Plugin'
@@ -54,7 +54,8 @@ Redmine::Plugin.register :redmine_toggl do
     }
 end
 
-Rails.configuration.to_prepare do
+# Rails.configuration.to_prepare do
+RedmineApp::Application.config.after_initialize do
   [
     [User, RedmineToggl::Patches::UserPatch],
     [Mailer, RedmineToggl::Patches::MailerPatch],

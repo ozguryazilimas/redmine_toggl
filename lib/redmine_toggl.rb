@@ -1,5 +1,5 @@
-require 'server_side_datatables'
-require 'toggl_entries_datatable'
+require_dependency File.join(File.dirname(__FILE__), 'server_side_datatables')
+require_dependency File.join(File.dirname(__FILE__), 'toggl_entries_datatable')
 
 module RedmineToggl
 
