@@ -3,7 +3,7 @@
 
 [Redmine Toggl](/) is a [Redmine](https://www.redmine.org) plugin to synchronize [Toggl](https://www.toggl.com) time tracking tool entries with Redmine time entries.
 
-This plugin is compatible with Redmine 4.x. If you want to use it with Redmine 3.x please use redmine3 branch.
+This plugin is compatible with Redmine 4.x and 5.x. If you want to use it with Redmine 3.x please use redmine3 branch.
 
 
 ## Features
@@ -184,6 +184,6 @@ Manage what users can do with Redmine permissions.
 
 ## License
 
-Copyright (c) 2016 - 2020 Onur Küçük. Licensed under [GNU GPLv2](LICENSE)
+Copyright (c) 2016 - 2023 Onur Küçük. Licensed under [GNU GPLv2](LICENSE)
 
 
