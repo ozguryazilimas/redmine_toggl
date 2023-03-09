@@ -117,6 +117,7 @@ class TogglEntry < ActiveRecord::Base
     opts['pid'] = toggl_project.try(:toggl_id)
     opts['tid'] = toggl_task.try(:toggl_id)
     opts['tags'] = clean_toggl_tags
+    opts['stop'] = stop.try(:iso8601) if stop
 
     opts
   end
