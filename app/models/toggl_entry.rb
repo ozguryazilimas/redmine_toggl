@@ -141,6 +141,12 @@ class TogglEntry < ActiveRecord::Base
   def update_time_entry
     self.issue = Issue.find_by_id(issue_id)
 
+    # toggl sends us times in UTC, normal tz conversion happens properly but for time_entry
+    # the day and hour components are parsed regardless of the timezone, so we force
+    # user timezone
+    tz = self.user.time_zone.presence
+    start_in_user_timezone = tz ? start.in_time_zone(tz) : start
+
     if self.issue &&
       (self.user.allowed_to?(:log_time, self.issue.project) ||
        self.user.toggl_can_log_time_to_all_issues)
@@ -150,7 +156,7 @@ class TogglEntry < ActiveRecord::Base
         :issue_id => self.issue.id,
         :user => self.user,
         :hours => duration.to_f / 3600,
-        :spent_on => start,
+        :spent_on => start_in_user_timezone,
         :comments => description.gsub(ISSUE_MATCHER, ' ').strip
       }
 
