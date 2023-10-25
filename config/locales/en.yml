@@ -1,9 +1,9 @@
 
 en:
   label_no_results_found: No results found
-  permission_view_toggl_entries: View Toggl entries
   permission_edit_all_toggl_entries: Edit all Toggl entries
   permission_toggl_log_time_to_all_issues: Create Toggl time entry to all issues
+  permission_view_toggl_entries: View Toggl entries
   redmine_toggl: Redmine Toggl
   toggl_entries_title: Toggl
   toggl:
@@ -16,9 +16,13 @@ en:
     last: Last
     my_entries: My Entries
     new_toggl_entry: New Toggl Entry
+    settings:
+      header: Redmine Toggl Settings
+      info: Select which Toggl tags should map to which time entry activities. Multiple Toggl tags can be written comma separated.
     start: Start
     stop: Stop
     time_entry: Time Entry
+    toggl_could_not_fetch: Could not fetch Toggl entries, make sure API Token is correct
     toggl_entries: Toggl Entries
     toggl_entry: Toggl Entry
     toggl_entry_created: Toggl entry created
@@ -27,13 +31,10 @@ en:
     toggl_invalid_user_toggl_entry_info: Invalid Toggl Entry detected, make sure issue number is correct
     toggl_invalid_user_toggl_entry_subject: Invalid Toggl Entry Detected
     toggl_project: Project
+    toggl_report_no_match_found: No match found
+    toggl_report_without_issue_subject: Redmine Toggl Entries Without Issue
+    toggl_report_without_project_subject: Redmine Toggl Entries Without Toggl Project
     toggl_tags: Tags
     toggl_task: Task
     toggl_workspace: Workspace
-    toggl_report_without_issue_subject: Redmine Toggl Entries Without Issue
-    toggl_report_without_project_subject: Redmine Toggl Entries Without Toggl Project
-    toggl_report_no_match_found: No match found
-    settings:
-      header: Redmine Toggl Settings
-      info: Select which Toggl tags should map to which time entry activities. Multiple Toggl tags can be written comma separated.
 

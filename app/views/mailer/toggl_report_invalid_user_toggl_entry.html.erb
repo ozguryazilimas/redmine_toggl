@@ -7,7 +7,7 @@
 <% @errors.each do |entry| %>
 
   <p>
-    <%= entry[:toggl_entry]['description'] %>
+    <%= entry[:toggl_entry].present? ? entry[:toggl_entry]['description'] : I18n.t('toggl.toggl_could_not_fetch') %>
   </p>
   <hr>
 

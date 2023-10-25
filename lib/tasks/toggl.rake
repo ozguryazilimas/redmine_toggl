@@ -186,7 +186,7 @@ namespace :toggl do
           'ERROR FOR USER: %s MESSAGE: %s TOGGL_ENTRY: %s',
           login,
           error[:error],
-          error[:toggl_entry]
+          (error[:toggl_entry].presence || I18n.t('toggl.toggl_could_not_fetch'))
         )
 
         STDERR.puts formatted

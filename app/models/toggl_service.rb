@@ -163,6 +163,14 @@ class TogglService
     get_toggl_time_entries
     save_toggl_time_entries
     remove_missing_toggl_time_entries if @remove_missing
+  rescue => e
+    Rails.logger.error e.message
+    Rails.logger.error e.backtrace.join("\n")
+
+    @errors << {
+      :error => e.message,
+      :toggl_entry => nil
+    }
   end
 
   def delete_time_entry(entry_id)

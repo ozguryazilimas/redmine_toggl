@@ -1,9 +1,9 @@
 
 tr:
   label_no_results_found: Sonuç bulunamadı
-  permission_view_toggl_entries: Toggl kayıtları görme
   permission_edit_all_toggl_entries: Tüm Toggl kayıtlarını düzenleme
   permission_toggl_log_time_to_all_issues: Tüm işlere Toggl zaman kaydı oluşturma
+  permission_view_toggl_entries: Toggl kayıtları görme
   redmine_toggl: Redmine Toggl
   toggl_entries_title: Toggl
   toggl:
@@ -16,9 +16,13 @@ tr:
     last: Son
     my_entries: Kayıtlarım
     new_toggl_entry: Yeni Toggl Kaydı
+    settings:
+      header: Redmine Toggl Ayarları
+      info: Hangi Toggl etiketlerinin hangi Redmine zaman aktivitesine karşılık geleceğini seçiniz. Birden fazla Toggl etiketi virgül ile ayrılarak yazılabilir.
     start: Başlangıç
     stop: Bitiş
     time_entry: Zaman Girdisi
+    toggl_could_not_fetch: Toggl kayıtları alınamadı, API anahtarını kontrol ediniz
     toggl_entries: Toggl Kayıtları
     toggl_entry: Toggl Kaydı
     toggl_entry_created: Toggl kaydı oluşturuldu
@@ -27,13 +31,10 @@ tr:
     toggl_invalid_user_toggl_entry_info: Geçersiz Toggl bulundu, iş numarasının doğru olduğundan emin olunuz.
     toggl_invalid_user_toggl_entry_subject: Geçersiz Toggl Kaydı
     toggl_project: Proje
+    toggl_report_no_match_found: Eşleşen kayıt bulunamadı
+    toggl_report_without_issue_subject: Redmine İş Kaydı Olmayan Toggl Kayıtları
+    toggl_report_without_project_subject: Redmine Toggl Projesi Olmayan Toggl Kayıtları
     toggl_tags: Etiketler
     toggl_task: Görev
     toggl_workspace: Çalışma Alanı
-    toggl_report_without_issue_subject: Redmine İş Kaydı Olmayan Toggl Kayıtları
-    toggl_report_without_project_subject: Redmine Toggl Projesi Olmayan Toggl Kayıtları
-    toggl_report_no_match_found: Eşleşen kayıt bulunamadı
-    settings:
-      header: Redmine Toggl Ayarları
-      info: Hangi Toggl etiketlerinin hangi Redmine zaman aktivitesine karşılık geleceğini seçiniz. Birden fazla Toggl etiketi virgül ile ayrılarak yazılabilir.
 
