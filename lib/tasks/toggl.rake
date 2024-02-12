@@ -180,10 +180,10 @@ namespace :toggl do
   def format_toggl_service_errors(ts_response)
     return if ts_response.blank? || ts_response[:errors].blank?
 
-    raise error[:error] unless error[:error] =~ /^HTTP Status: 4/
-
     ts_response[:errors].each do |login, errors|
       errors.each do |error|
+        raise error[:error] unless error[:error] =~ /^HTTP Status: 4/
+
         formatted = format(
           'ERROR FOR USER: %s MESSAGE: %s TOGGL_ENTRY: %s',
           login,
