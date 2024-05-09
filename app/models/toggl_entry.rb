@@ -113,9 +113,9 @@ class TogglEntry < ActiveRecord::Base
       'duration' => duration
     }
 
-    opts['wid'] = toggl_workspace.try(:toggl_id)
-    opts['pid'] = toggl_project.try(:toggl_id)
-    opts['tid'] = toggl_task.try(:toggl_id)
+    opts['workspace_id'] = toggl_workspace.try(:toggl_id)
+    opts['project_id'] = toggl_project.try(:toggl_id)
+    opts['task_id'] = toggl_task.try(:toggl_id)
     opts['tags'] = clean_toggl_tags
     opts['stop'] = stop.try(:iso8601) if stop
 
@@ -190,7 +190,7 @@ class TogglEntry < ActiveRecord::Base
   def sync_and_destroy
     transaction do
       toggl = TogglService.new(:user => user)
-      toggl.delete_time_entry(toggl_id)
+      toggl.delete_time_entry(toggl_id, wid)
       time_entry.destroy if time_entry
       destroy
     end

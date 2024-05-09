@@ -3,5 +3,6 @@
 <%= labelled_form_for @toggl_entry, :url => toggl_entry_path(@toggl_entry) do |f| %>
   <%= render :partial => 'form', :locals => {:f => f} %>
   <%= submit_tag l(:button_save) %>
+  <%= link_to l(:button_cancel), toggl_entries_path %>
 <% end %>
 

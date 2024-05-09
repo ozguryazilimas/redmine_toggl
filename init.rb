@@ -5,7 +5,7 @@ Redmine::Plugin.register :redmine_toggl do
   name 'Redmine Toggl Plugin'
   author 'Onur Kucuk'
   description 'Sync and Manage Toggl Entries with Redmine'
-  version '2.9.5'
+  version '3.0.0'
   url 'http://www.ozguryazilim.com.tr'
   author_url 'http://www.ozguryazilim.com.tr'
   requires_redmine :version_or_higher => '4.0.0'
@@ -58,8 +58,7 @@ end
 RedmineApp::Application.config.after_initialize do
   [
     [User, RedmineToggl::Patches::UserPatch],
-    [Mailer, RedmineToggl::Patches::MailerPatch],
-    [TogglV8::Connection, RedmineToggl::Patches::Togglv8ConnectionPatch]
+    [Mailer, RedmineToggl::Patches::MailerPatch]
   ].each do |classname, modulename|
     unless classname.included_modules.include?(modulename)
       classname.send(:include, modulename)
