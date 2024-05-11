@@ -37,4 +37,5 @@ tr:
     toggl_tags: Etiketler
     toggl_task: Görev
     toggl_workspace: Çalışma Alanı
+    user_is_not_authorized_for_issue: "%{user} kullanıcısının %{issue} iş kaydına erişim yetkisi yoktur"
 

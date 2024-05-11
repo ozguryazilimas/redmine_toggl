@@ -182,7 +182,7 @@ namespace :toggl do
 
     ts_response[:errors].each do |login, errors|
       errors.each do |error|
-        raise error[:error] unless error[:error] =~ /^HTTP Status: 4/
+        # raise error[:error] unless error[:error] =~ /^HTTP Status: 4/
 
         formatted = format(
           'ERROR FOR USER: %s MESSAGE: %s TOGGL_ENTRY: %s',

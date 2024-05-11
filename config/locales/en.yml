@@ -37,4 +37,5 @@ en:
     toggl_tags: Tags
     toggl_task: Task
     toggl_workspace: Workspace
+    user_is_not_authorized_for_issue: "User %{user} is not authorized for issue %{issue}"
 
