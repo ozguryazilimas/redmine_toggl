@@ -11,6 +11,7 @@ class TogglService
 
     def http_call(http_method, url_path, payload = {}, http_headers = {})
       uri = URI.parse(format('%s/%s', @toggl_url, url_path))
+      response_is_json = true
 
       case http_method
       when :get
@@ -23,6 +24,7 @@ class TogglService
         end
       when :delete
         request = Net::HTTP::Delete.new(uri)
+        response_is_json = false
       when :put
         request = Net::HTTP::Put.new(uri)
 
@@ -46,21 +48,21 @@ class TogglService
         :use_ssl => uri.scheme == HTTPS
       }
 
-      # request["Authorization"] =  "Basic " + Base64::encode64("my_user:my_password")
+      # request["Authorization"] =  format('Basic %s', Base64::encode64("#{@username}:#{@password}"))
       request.basic_auth @username, @password
 
       response_raw = Net::HTTP.start(uri.hostname, uri.port, request_options) do |http|
         http.request(request)
       end
 
-      response = JSON.parse(response_raw.body)
+      response = response_is_json ? JSON.parse(response_raw.body) : response_raw.body
       return response['data'] if response.respond_to?(:has_key?) && response.has_key?('data')
 
       response
     rescue => e
       Rails.logger.error "RedmineToggl received error #{e.inspect}"
       raise e
-      # response_raw.body
+      response_raw.body
     end
 
   end

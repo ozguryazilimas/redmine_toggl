@@ -193,7 +193,8 @@ class TogglService
 
     ActiveRecord::Base.transaction do
       fail I18n.t('toggl.invalid_duration') if time_entry_opts['duration'].to_i < 1
-      entry = @toggl.create_time_entry(time_entry_opts)
+      entry_raw = @toggl.create_time_entry(time_entry_opts)
+      entry = format_time_entry(entry_raw)
       resp = save_toggl_entry_from_toggl_data(entry)
       raise resp[:error] if resp[:error].present?
     end
@@ -294,11 +295,11 @@ class TogglService
 
       t_project.assign_attributes(
         :name => pr['name'],
-        :wid => pr['wid'],
+        :wid => pr['workspace_id'],
         :hex_color => pr['hex_color'],
         :billable => pr['billable'],
         :active => pr['active'],
-        :toggl_workspace_id => workspaces[pr['wid'].to_i]
+        :toggl_workspace_id => workspaces[pr['workspace_id'].to_i]
       )
 
       t_project.save! if t_project.changed?
@@ -320,11 +321,11 @@ class TogglService
 
       t_task.assign_attributes(
         :name => tt['name'],
-        :wid => tt['wid'],
-        :pid => tt['pid'],
+        :wid => tt['workspace_id'],
+        :pid => tt['project_id'],
         :active => tt['active'],
-        :toggl_workspace_id => workspaces[tt['wid'].to_i],
-        :toggl_project_id => projects[tt['pid'].to_i]
+        :toggl_workspace_id => workspaces[tt['workspace_id'].to_i],
+        :toggl_project_id => projects[tt['project_id'].to_i]
       )
 
       t_task.save! if t_task.changed?
