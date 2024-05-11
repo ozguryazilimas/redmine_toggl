@@ -5,6 +5,8 @@ class TogglService
   TOGGL_API_KEY = 'Toggl API Key'
   TOGGL_WORKSPACE = 'Toggl Workspace'
 
+  HTTP_CODE_NOT_FOUND = 404
+
   attr_accessor :toggl, :toggl_conn, :apikey, :user, :toggl_time_entries, :toggl_workspaces, :toggl_projects,
                 :toggl_tasks, :custom_field_api_key, :custom_field_workspace, :errors
 
@@ -38,19 +40,19 @@ class TogglService
 
   def get_toggl_time_entries
     args = @apiparams || {}
-    received_entries = @toggl.get_time_entries(args)
+    _http_code, received_entries = @toggl.get_time_entries(args)
     @toggl_time_entries = received_entries.map{|k| format_time_entry(k)}
   end
 
   def get_toggl_workspaces
-    @toggl_workspaces = @toggl.workspaces
+    _http_code, @toggl_workspaces = @toggl.workspaces
   end
 
   def get_toggl_projects
     @toggl_projects = []
 
     TogglWorkspace.pluck(:toggl_id).each do |ws_id|
-      ws_projects = @toggl.projects(ws_id) rescue []
+      _http_code, ws_projects = @toggl.projects(ws_id) rescue [nil, []]
       @toggl_projects += ws_projects if ws_projects.present?
     end
   end
@@ -59,7 +61,7 @@ class TogglService
     @toggl_tasks = []
 
     TogglWorkspace.pluck(:toggl_id).each do |ws_id|
-      ws_tasks = @toggl.tasks(ws_id) rescue []
+      _http_code, ws_tasks = @toggl.tasks(ws_id) rescue [nil, []]
       @toggl_tasks += ws_tasks if ws_tasks.present?
     end
   end
@@ -130,8 +132,10 @@ class TogglService
     # than 3 total data, then there is nothing in between that we care about
     return if @toggl_time_entries.count < 3
 
-    start_time = @toggl_time_entries.first['start']
-    end_time = @toggl_time_entries.last['start']
+    times = @toggl_time_entries.map{|k| k['start']}.sort
+    start_time = times.first
+    end_time = times.last
+
     remote_ids = @toggl_time_entries.map{|k| k['toggl_id']}
 
     # find entries that might be deleted from Toggl, but not from Redmine
@@ -139,15 +143,17 @@ class TogglService
                                  .where('start <= ?', Time.parse(end_time))
                                  .where.not(:toggl_id => remote_ids)
 
+    might_be_deleted = might_be_deleted.where(:user_id => @user.id) if @user.is_a?(User)
+
     might_be_deleted.each do |entry|
       should_delete = false
 
       begin
-        entry_data = @toggl.get_time_entry(entry.toggl_id)
+        http_code, entry_data = @toggl.get_time_entry(entry.toggl_id)
 
         # if you fetch with get_time_entries, Toggl does not return deleted ones
         # but if get just one by hand you can detect if it was deleted
-        should_delete = entry_data['server_deleted_at'].present?
+        should_delete = http_code.to_i == HTTP_CODE_NOT_FOUND || entry_data['server_deleted_at'].present?
       rescue => e
         Rails.logger.warn "Trying to detect if Toggl entry with toggl_id #{entry.toggl_id} was deleted " \
           "but instead received #{e.message}"
@@ -193,7 +199,7 @@ class TogglService
 
     ActiveRecord::Base.transaction do
       fail I18n.t('toggl.invalid_duration') if time_entry_opts['duration'].to_i < 1
-      entry_raw = @toggl.create_time_entry(time_entry_opts)
+      _http_code, entry_raw = @toggl.create_time_entry(time_entry_opts)
       entry = format_time_entry(entry_raw)
       resp = save_toggl_entry_from_toggl_data(entry)
       raise resp[:error] if resp[:error].present?
@@ -211,7 +217,7 @@ class TogglService
 
     ActiveRecord::Base.transaction do
       fail I18n.t('toggl.invalid_duration') if time_entry_opts['duration'].to_i < 1
-      entry_raw = @toggl.update_time_entry(toggl_id, workspace_id, time_entry_opts)
+      _http_code, entry_raw = @toggl.update_time_entry(toggl_id, workspace_id, time_entry_opts)
       entry = format_time_entry(entry_raw)
       resp = save_toggl_entry_from_toggl_data(entry)
       raise resp[:error] if resp[:error].present?

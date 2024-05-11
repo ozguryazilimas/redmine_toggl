@@ -56,13 +56,13 @@ class TogglService
       end
 
       response = response_is_json ? JSON.parse(response_raw.body) : response_raw.body
-      return response['data'] if response.respond_to?(:has_key?) && response.has_key?('data')
+      response = response['data'] if response.respond_to?(:has_key?) && response.has_key?('data')
 
-      response
+      [response_raw.code, response]
     rescue => e
       Rails.logger.error "RedmineToggl received error #{e.inspect}"
       raise e
-      response_raw.body
+      [response_raw.code, response_raw.body]
     end
 
   end
