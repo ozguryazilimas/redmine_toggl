@@ -8,6 +8,7 @@ This plugin is compatible with Redmine 4.x and 5.x. If you want to use it with R
 
 ## Features
 
+* Supports Toggl API v9
 * Synchronize Toggl entries for users that has Toggl API key set in Redmine
 * Automatically create / update / delete Redmine time entry for related issue
 * Time entry activities can be mapped to tags on Toggl entries. You can define which Toggl tag matches which Redmine time entry activity on Redmine Admin plugin settings page.
