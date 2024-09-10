@@ -131,7 +131,7 @@ class TogglEntry < ActiveRecord::Base
     self.issue_id = description.scan(ISSUE_MATCHER).first.try(:last).try(:to_i)
     return unless self.issue_id
 
-    unless self.issue.visible?(self.user)
+    unless self.issue&.visible?(self.user)
       Rails.logger.info "Toggl ERROR user #{self.user&.login} do not have access to issue #{self.issue_id}"
       raise I18n.t('toggl.user_is_not_authorized_for_issue', :issue => self.issue_id, :user => self.user&.login)
     end
