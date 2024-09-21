@@ -187,8 +187,12 @@ class TogglService
   end
 
   def parse_api_opts(opts)
+    use_user_timezone { TogglEntry.new(opts).toggl_params }
+  end
+
+  def use_user_timezone
     Time.use_zone(@user.time_zone || 'UTC') do
-      TogglEntry.new(opts).toggl_params
+      yield
     end
   end
 
@@ -199,16 +203,23 @@ class TogglService
 
     ActiveRecord::Base.transaction do
       fail I18n.t('toggl.invalid_duration') if time_entry_opts['duration'].to_i < 1
+
       _http_code, entry_raw = @toggl.create_time_entry(time_entry_opts)
       entry = format_time_entry(entry_raw)
       resp = save_toggl_entry_from_toggl_data(entry)
-      raise resp[:error] if resp[:error].present?
+
+      # if Toggl accepts the record but Redmine refuses, e.g. because of issue id we delete the bad version from
+      # Toggl to prevent it fail over and over during sync
+      if resp[:error].present?
+        delete_time_entry(entry['toggl_id'], entry['wid'])
+        raise resp[:error]
+      end
     end
 
     entry
   end
 
-  def update_time_entry(opts)
+  def update_time_entry(opts, old_toggl_entry = nil)
     hashed_opts = HashWithIndifferentAccess.new(opts)
     toggl_id = hashed_opts[:toggl_id].to_i
     workspace_id = TogglWorkspace.find_by_id(hashed_opts[:toggl_workspace_id])&.toggl_id
@@ -217,10 +228,20 @@ class TogglService
 
     ActiveRecord::Base.transaction do
       fail I18n.t('toggl.invalid_duration') if time_entry_opts['duration'].to_i < 1
+
       _http_code, entry_raw = @toggl.update_time_entry(toggl_id, workspace_id, time_entry_opts)
       entry = format_time_entry(entry_raw)
       resp = save_toggl_entry_from_toggl_data(entry)
-      raise resp[:error] if resp[:error].present?
+
+      if resp[:error].present?
+        # revert Toggl changes if Redmine refuses the new attributes
+        if old_toggl_entry.present?
+          old_time_entry_opts = use_user_timezone { old_toggl_entry.toggl_params }
+          _http_code, entry_raw = @toggl.update_time_entry(toggl_id, workspace_id, old_time_entry_opts)
+        end
+
+        raise resp[:error]
+      end
     end
   end
 

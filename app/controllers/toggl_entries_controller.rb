@@ -74,7 +74,7 @@ class TogglEntriesController < ApplicationController
     raise Unauthorized unless user_can_edit_toggl_entry(@toggl_entry)
 
     toggl = TogglService.new(:user => @toggl_entry.user)
-    toggl.update_time_entry(toggl_entry_params)
+    toggl.update_time_entry(toggl_entry_params, @toggl_entry)
     redirect_to @toggl_entry, :notice => t('toggl.toggl_entry_updated')
   rescue => e
     Rails.logger.error "Toggl ERROR: #{e.message}\n#{e.backtrace}"
@@ -93,7 +93,9 @@ class TogglEntriesController < ApplicationController
     redirect_to toggl_entries_url, :notice => e.message
   end
 
+
   private
+
 
   def set_user
     @user = User.current
