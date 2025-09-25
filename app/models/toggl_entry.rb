@@ -7,7 +7,7 @@ class TogglEntry < ActiveRecord::Base
   TOGGL_MULTI_TAG_SEPARATOR = '|'.freeze
 
 
-  serialize :toggl_tags, JSON
+  serialize :toggl_tags, :coder => JSON
 
   belongs_to :user
   belongs_to :issue

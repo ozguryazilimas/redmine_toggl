@@ -5,10 +5,10 @@ Redmine::Plugin.register :redmine_toggl do
   name 'Redmine Toggl Plugin'
   author 'Onur Kucuk'
   description 'Sync and Manage Toggl Entries with Redmine'
-  version '3.1.0'
+  version '3.2.0'
   url 'http://www.ozguryazilim.com.tr'
   author_url 'http://www.ozguryazilim.com.tr'
-  requires_redmine :version_or_higher => '4.0.0'
+  requires_redmine :version_or_higher => '6.0.0'
 
   permission :view_toggl_entries, {
     :toggl_entries => [
