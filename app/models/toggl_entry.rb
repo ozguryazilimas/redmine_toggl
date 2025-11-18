@@ -1,5 +1,7 @@
 class TogglEntry < ActiveRecord::Base
 
+  include Redmine::I18n
+
   ISSUE_MATCHER = /\s*#(\d+)\s*/
   DEFAULT_COLOR = '#000000'.freeze
   EMAIL_VALIDATOR = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
