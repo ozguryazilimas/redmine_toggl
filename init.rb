@@ -1,5 +1,4 @@
 require 'redmine'
-require_dependency File.join(File.dirname(__FILE__), 'lib/redmine_toggl')
 
 Redmine::Plugin.register :redmine_toggl do
   name 'Redmine Toggl Plugin'
